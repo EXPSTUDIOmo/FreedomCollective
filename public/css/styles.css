@@ -38,17 +38,6 @@
     src: url('fonts/Solway-Bold.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'LoraVariable';
-    src: url('fonts/Lora-Variable.ttf') format('truetype');
-}
-
-
-@font-face {
-    font-family: 'Sanchez';
-    src: url('fonts/Sanchez-Regular.ttf') format('truetype');
-}
-
 html {
     overflow: hidden;
 }
