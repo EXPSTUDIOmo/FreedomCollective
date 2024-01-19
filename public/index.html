@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FREEDOM COLLECTIVE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/favicon_io/site.webmanifest">
+    <script type="text/javascript" src="/js/socket.io.js"></script>
+    <script type="text/javascript" src="/js/howler.min.js"></script>
+    <script src="NoSleep.min.js"></script>
+    <script defer src="/js/client.js" type="module"></script>
+    <link href="/dist/output.css" rel="stylesheet">
+
+  </head>
+  <body class="background" class="font-Sanchez">
+ 
+      <div id="startscreen" class="relative flex justify-center items-center w-screen h-screen">
+
+        <h1 class="absolute text-white text-3xl tracking-wider text-center top-10 font-Sanchez text-shadow">
+          <div class="stack" style="--stacks: 3;">
+            <span style="--index: 0;">FREEDOM COLLECTIVE</span>
+            <span style="--index: 1;">FREEDOM COLLECTIVE</span>
+            <span style="--index: 2;">FREEDOM COLLECTIVE</span>
+          </div>
+        </h1>
+        <div id="loading_container" class="flex justify-center items-center flex-col">
+          <div class="spinner"></div>
+          <h1 class="text-white text-5xl mt-12 ">Loading</h1>
+        </div>
+       
+        
+        <div id="connect_btn_container" class="relative connect_btn rounded-full hidden">
+          <button id="connect_btn" class=" text-2xl w-36 h-36 py-2 px-2 rounded-full z-10 font-Sanchez text-shadow">
+            CONNECT
+          </button>
+          <div class="pulse absolute w-36 h-36 pointer-events-none"></div>
+          <div class="pulse pulse2 absolute w-36 h-36 pointer-events-none"></div>
+        </div>
+
+        <!-- <img src="img/avatars/secretary_white.png" class="screen-avatar secretary" width="70px">
+        <img src="img/avatars/szusi_white.png" class="screen-avatar szusi" width="100px"> -->
+
+      </div>  
+    
+
+    <div id="content" class="relative flex justify-center items-center w-screen h-screen background hidden">
+
+      <!-- WAITSCREEN -->
+      <div id="waitscreen" class="relative flex justify-center items-center w-screen h-screen">
+        <h1 class="absolute text-white font-Sanchez text-3xl top-10">
+          <div class="stack" style="--stacks: 3;">
+            <span style="--index: 0;">CONNECTED</span>
+            <span style="--index: 1;">CONNECTED</span>
+            <span style="--index: 2;">CONNECTED</span>
+          </div>
+        </h1>
+        <!-- <div id="wait_text" class="wait_text absolute text-white font-Sanchez text-2xl">
+          <span>W</span><span>A</span><span>I</span><span>T</span><span>I</span><span>N</span><span>G</span>
+        </div> -->
+
+        <img id="waitavatar_secretary" src="img/avatars/secretary_white.png" class="screen-avatar secretary" width="100px">
+        <img id="waitavatar_szusi" src="img/avatars/szusi_white.png" class="screen-avatar szusi" width="140px">
+      </div>
+
+      <!-- CHAT NOTIFICATION  -->
+      <div id="incomingchat" class="container relative block w-9/12 hidden border-solid border-4 border-white rounded-2xl px-4 py-4 chatstartanim cursor-pointer" style="background-color: rgba(66, 0, 40, 0.35);">
+        <h1 class="text-white font-Sanchez text-3xl text-center w-full">Unread Messages</h1>
+        <img src="img/incomingchat_purple.png" width="80px" class="top-0 right-0">
+      </div>
+
+      <!-- CHAT SCREEN -->
+      <div id="chatscreen" class="flex flex-col w-full h-full chat-bg hidden pb-28 font-Sanchez">
+
+        <div id="chattitle" class="flex items-center w-full chat-title">
+          <h1>FREEDOM CHAT</h1>
+        </div>
+
+        <div id="chatheader" class="flex justify-between chat-header px-2 py-2">
+          <div class="flex items-center space-x-2">
+            <div id="chatavatar" class="rounded-full w-16 h-16 border-solid border border-white">
+              <img src="img/avtarszusi.png" class="w-full h-full rounded-full">
+            </div>
+            <h1 class="text-white text-3xl ml-4">ZSUZSI</h1>
+          </div>
+          
+          <div class="flex items-center space-x2">
+            <img src="img/videocall.png" class="w-10">
+            <img src="img/phonecall.png" class="w-6 h-6 ml-4">
+            <img src="img/Menu.png" class="w-5 ml-4">
+          </div>
+        
+        </div>
+
+        <!-- CHAT CONTENT -->
+        <div id="chatcontent" class="overflow-y-auto bg-red w-full h-full pt-4 px-4 pb-20"></div>
+      </div>
+      
+
+      <!-- VIDEO SCREEN-->
+      <div id="videoscreen" class="w-full h-full hidden">
+        <video id="video_1" src="Videos/scaled_Alle_Dach_video.mp4" playsinline loop class="hidden video"></video>
+        <video id="video_2" src="Videos/scaled_Andrei_1_video.mp4" playsinline loop class="hidden video"></video>
+      </div>
+    </div>
+  </body>
+</html>
