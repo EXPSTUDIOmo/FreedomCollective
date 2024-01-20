@@ -65,8 +65,8 @@ app.get('/max/admin/stop', (req, res) => {
 });
 
 
-httpServer.listen(3001, () => {
-  console.log('Server running on port 3001');
+httpServer.listen(8080, () => {
+  console.log('Server running on port 8080');
 });
 
 
