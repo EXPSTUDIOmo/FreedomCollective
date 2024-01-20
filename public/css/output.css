@@ -879,12 +879,8 @@ html {
 
 .background {
   background: linear-gradient(162deg, #900082 0.79%, #037878 100%);
-  animation: background-rotate 7s ease infinite;
-  background-size: 200% 200%;
-}
-
-.text-shadow {
-  text-shadow: 0px 4px 4.2px rgba(0, 0, 0, 0.448);
+  animation: background-rotate 10s ease infinite;
+  background-size: 300% 200%;
 }
 
 @keyframes background-rotate {
@@ -899,6 +895,10 @@ html {
   100% {
     background-position: 0% 50%;
   }
+}
+
+.text-shadow {
+  text-shadow: 0px 4px 4.2px rgba(0, 0, 0, 0.448);
 }
 
 .connect_btn {

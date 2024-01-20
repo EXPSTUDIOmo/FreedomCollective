@@ -40,13 +40,10 @@ html {
 
 .background {
     background: linear-gradient(162deg, #900082 0.79%, #037878 100%);
-    animation: background-rotate 7s ease infinite;
-    background-size: 200% 200%;
+    animation: background-rotate 10s ease infinite;
+    background-size: 300% 200%;
 }
 
-.text-shadow {
-    text-shadow: 0px 4px 4.2px rgba(0, 0, 0, 0.448);
-}
 
 @keyframes background-rotate {
     0% {
@@ -59,6 +56,11 @@ html {
 		background-position: 0% 50%;
 	}
 }
+
+.text-shadow {
+    text-shadow: 0px 4px 4.2px rgba(0, 0, 0, 0.448);
+}
+
 
 .connect_btn {
     background: linear-gradient(145deg, rgba(0, 145, 177, 0.684) 17.08%, rgba(143, 35, 160, 0.25) 85.45%); 
