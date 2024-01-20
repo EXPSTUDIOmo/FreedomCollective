@@ -626,10 +626,6 @@ video {
   margin-right: 0.5rem;
 }
 
-.mt-12 {
-  margin-top: 3rem;
-}
-
 .block {
   display: block;
 }
@@ -757,6 +753,11 @@ video {
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -802,10 +803,6 @@ video {
   text-align: right;
 }
 
-.font-Sanchez {
-  font-family: Sanchez, serif;
-}
-
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -816,9 +813,9 @@ video {
   line-height: 2.25rem;
 }
 
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .tracking-wider {
@@ -849,41 +846,15 @@ video {
 }
 
 @font-face {
-  font-family: 'Glitching';
+  font-family: 'Baskervville';
 
-  src: url("fonts/GlitchingRegular.ttf") format('truetype');
-
-  font-weight: normal;
-
-  font-style: normal;
+  src: url('fonts/Baskervville-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'DoctorGlitch';
+  font-family: 'Mynerve';
 
-  src: url("fonts/DoctorGlitch.otf") format('opentype');
-
-  font-weight: normal;
-
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'GlitchCode';
-
-  src: url("fonts/GlitchCodeRegular.ttf") format('truetype');
-}
-
-@font-face {
-  font-family: 'SolwayRegular';
-
-  src: url("fonts/Solway-Regular.ttf") format('truetype');
-}
-
-@font-face {
-  font-family: 'SolwayBold';
-
-  src: url('fonts/Solway-Bold.ttf') format('truetype');
+  src: url('fonts/Mynerve-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -892,13 +863,23 @@ video {
   src: url("fonts/Sanchez-Regular.ttf") format('truetype');
 }
 
+@font-face {
+  font-family: 'Luckiest';
+
+  src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype');
+}
+
 html {
   overflow: hidden;
 }
 
+.fcfont {
+  font-family: 'Luckiest';
+}
+
 .background {
   background: linear-gradient(162deg, #900082 0.79%, #037878 100%);
-  animation: background-rotate 12s ease infinite;
+  animation: background-rotate 7s ease infinite;
   background-size: 200% 200%;
 }
 
@@ -950,8 +931,11 @@ html {
 
 .screen-avatar {
   position: absolute;
-  animation: avatar 12s ease infinite;
   opacity: 0;
+}
+
+.screen-avatar-active {
+  animation: avatar 12s ease infinite;
 }
 
 .secretary {
@@ -962,7 +946,11 @@ html {
 .szusi {
   bottom: 4.3rem;
   left: 2rem;
-  animation-delay: 6s;
+}
+
+.fan {
+  bottom: 4rem;
+  left: 6rem;
 }
 
 @keyframes avatar {
@@ -982,34 +970,53 @@ html {
   }
 }
 
-.spinner {
-  width: 56px;
-  height: 56px;
-  display: grid;
-  border: 4.5px solid #0000;
-  border-radius: 50%;
-  border-right-color: #ffffff;
-  animation: spinner-a4dj62 1s infinite linear;
+/* HTML: <div class="loader"></div> */
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --g: #00000000 calc(100% - 5px),#ffffff calc(100% - 3px) 93%,#0000;
+  background: 
+      radial-gradient(farthest-side at bottom,var(--g)) top                  /100% 50%,
+      radial-gradient(farthest-side at top   ,var(--g)) bottom 18% right  0  /80%  40%,
+      radial-gradient(farthest-side at bottom,var(--g)) left   50% top    30%/60%  30%,
+      radial-gradient(farthest-side at top   ,var(--g)) right  34% bottom 37%/40%  20%,
+      radial-gradient(farthest-side at bottom,var(--g)) left   52% top    43%/24%  12%;
+  background-repeat: no-repeat;
+  animation: l20 2s infinite linear;
 }
 
-.spinner::before,
- .spinner::after {
-  content: "";
-  grid-area: 1/1;
-  margin: 2.2px;
-  border: inherit;
-  border-radius: 50%;
-  animation: spinner-a4dj62 2s infinite;
-}
-
-.spinner::after {
-  margin: 8.9px;
-  animation-duration: 3s;
-}
-
-@keyframes spinner-a4dj62 {
+@keyframes l20 {
   100% {
-    transform: rotate(1turn);
+    transform: rotate(1turn)
+  }
+}
+
+/* HTML: <div class="loader"></div> */
+
+/* HTML: <div class="loader"></div> */
+
+/* HTML: <div class="loader"></div> */
+
+.loadertext {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-weight: bold;
+  font-size: 30px;
+  padding-bottom: 8px;
+  color: white;
+  margin-top: 3.5rem;
+  background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
+  animation: l2 2s linear infinite;
+}
+
+.loadertext:before {
+  content:"Loading..."
+}
+
+@keyframes l2 {
+  to{
+    background-size: 100% 3px
   }
 }
 
@@ -1212,51 +1219,6 @@ html {
   pointer-events: none;
   -o-object-fit: cover;
      object-fit: cover;
-}
-
-.stack {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.stack span {
-  grid-row-start: 1;
-  grid-column-start: 1;
-  --stack-height: calc(100% / var(--stacks) - 1px);
-  --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
-  --clip-top: calc(var(--stack-height) * var(--index));
-  --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
-  -webkit-clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
-          clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
-  animation: stack 640ms cubic-bezier(.46,.29,0,1.24) 1 backwards calc(var(--index) * 120ms), glitch 5s ease infinite 2s alternate-reverse;
-}
-
-.stack span:nth-child(odd) {
-  --glitch-translate: 8px;
-}
-
-.stack span:nth-child(even) {
-  --glitch-translate: -8px;
-}
-
-@keyframes stack {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%);
-  };
-
-  60% {
-    opacity: 0.5;
-    transform: translateX(50%);
-  }
-
-  80% {
-    transform: none;
-    opacity: 1;
-  }
-
-  100% {
-  }
 }
 
 @keyframes glitch {

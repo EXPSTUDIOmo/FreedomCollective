@@ -13,11 +13,12 @@ body {
 }
 
 
-#control {
- 
+#status {
+    font-size: 2rem;
 }
 
 .control-button {
     font-size: 2rem;
     font-family: 'Sanchez';
+    margin: 1rem;
 }

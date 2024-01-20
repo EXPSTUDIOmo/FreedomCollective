@@ -93,6 +93,7 @@ function getNextVoice()
 // ******************* State control ********************************
 
 let clients = []; // list of all connected clients
+let admins = []; // list of connected admins
 let lastStartTime= 0; // if we are currently playing, time of last started soundfile
 let currentScene = 0;
 let isPlaying = false;
@@ -105,8 +106,73 @@ let isPlaying = false;
 // ********************** Socket.IO *************************
 io.on('connection', (socket) => {
 
-  console.log("new user");
+  if(socket.handshake.query.admin === 'true')
+  {
+    addAdmin(socket);
+  }
 
+  else
+  {
+    addClient(socket);
+  }
+});
+
+
+function addAdmin(socket)
+{
+  admins.push(socket);
+
+  socket.on('disconnect', () => {
+    admins.splice(clients.indexOf(socket), 1);
+  });
+
+  socket.emit('connected');
+  sendStateToAdmins(socket);
+  
+  socket.on('admin_stop', () => {
+    stopPlayback();
+    sendStateToAdmins(socket);
+   })
+  
+   socket.on('admin_scene_1', () => {
+    console.log("admin start scene 1");
+    loadScene(1);
+    sendStateToAdmins(socket);
+   })
+  
+   socket.on('admin_scene_2', () => {
+    loadScene(2);
+    sendStateToAdmins(socket);
+   })
+  
+   socket.on('admin_scene_3', () => {
+    loadScene(3);
+    sendStateToAdmins(socket);
+   })
+
+   socket.on('ping', () => {
+    socket.emit('pong');
+ })
+}
+
+
+function sendStateToAdmins(socket)
+{
+  let serverState = {
+    playing: isPlaying,
+    scene: currentScene
+  }
+
+  for(let admin of admins)
+  {
+    admin.emit('state', serverState);
+  }
+  
+}
+
+
+function addClient(socket)
+{
   socket.voice = getNextVoice(); 
   socket.emit('connected', {voice: socket.voice});
   clients.push(socket);
@@ -119,87 +185,12 @@ io.on('connection', (socket) => {
 
     let timeToJump = isPlaying ? (Date.now() - lastStartTime) / 1000 : 0; 
     socket.emit("activation", { playing: isPlaying, scene: currentScene, time: timeToJump});
-    
- })
+    })
 
  socket.on('ping', () => {
     socket.emit('pong');
  })
-
- socket.on('admin_start', () => {
-  loadScene(1);
- })
-
-});
-
-
-
-
-
-
-
-
-
-
-
-// ======================= OSC ADMIN CONTROL (from Max) =======================
-
-const OSCserver = require('node-osc').Server;
-const OSCClient = require('node-osc').Client;
-
-const oscToMax = new OSCClient('127.0.0.1', 5555); // TODO evtl. dynamisch wenn nicht auf gleichem Rechner wie Max
-
-let oscServer = new OSCserver(3333, '0.0.0.0', () => {
-  console.log('*** OSC CONNECTION STARTED AND LISTENING ON PORT 3333 ***');
-});
-
-
-// message handling
-oscServer.on('message', function (msg) {
-
-  let AP = msg[0]; // AdressPattern
-
-  switch(AP)
-  {
-    case '/start':   
-      let sceneToLoad = msg[1];
-      loadScene(sceneToLoad);
-      oscToMax.send('/server', `started scene ${sceneToLoad}`);
-      break;
-    
-    case '/stop':
-      stopPlayback();
-      oscToMax.send('/server', "stopped");
-      break;
-
-    case '/colorall':
-      let R = msg[1];
-      let G = msg[2];
-      let B = msg[3];
-      setClientColors(R,G,B);
-      break;
-
-    case '/users':
-      oscToMax.send("/users", clients.length);
-      break;
-
-    case '/mode':
-      let mode = msg[1];
-      setMode(mode);
-      break;
-
-    case '/organ':
-      let voice = msg[1];
-      let pitch = msg[2];
-      let velocity = msg[3];
-      playOrgan(voice, pitch, velocity);
-      break;
-  }
-});
-
-
-
-
+}
 
 
 // ================================= Client Control =========================

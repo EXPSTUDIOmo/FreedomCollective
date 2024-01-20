@@ -14,25 +14,22 @@
     <link href="/css/output.css" rel="stylesheet">
 
   </head>
-  <body class="background" class="font-Sanchez">
+  <body class="background">
  
       <div id="startscreen" class="relative flex justify-center items-center w-screen h-screen">
 
-        <h1 class="absolute text-white text-3xl tracking-wider text-center top-10 font-Sanchez text-shadow">
-          <div class="stack" style="--stacks: 3;">
-            <span style="--index: 0;">FREEDOM COLLECTIVE</span>
-            <span style="--index: 1;">FREEDOM COLLECTIVE</span>
-            <span style="--index: 2;">FREEDOM COLLECTIVE</span>
-          </div>
+        <h1 class="absolute text-white text-4xl tracking-wider text-center top-10 fcfont text-shadow">
+            FREEDOM COLLECTIVE
         </h1>
+
         <div id="loading_container" class="flex justify-center items-center flex-col">
-          <div class="spinner"></div>
-          <h1 class="text-white text-5xl mt-12 ">Loading</h1>
+          <div class="loader"></div>
+          <div class="loadertext fcfont"></div>
         </div>
        
         
         <div id="connect_btn_container" class="relative connect_btn rounded-full hidden">
-          <button id="connect_btn" class=" text-2xl w-36 h-36 py-2 px-2 rounded-full z-10 font-Sanchez text-shadow">
+          <button id="connect_btn" class=" text-2xl w-36 h-36 py-2 px-2 rounded-full z-10 fcfont text-shadow">
             CONNECT
           </button>
           <div class="pulse absolute w-36 h-36 pointer-events-none"></div>
@@ -49,19 +46,12 @@
 
       <!-- WAITSCREEN -->
       <div id="waitscreen" class="relative flex justify-center items-center w-screen h-screen">
-        <h1 class="absolute text-white font-Sanchez text-3xl top-10">
-          <div class="stack" style="--stacks: 3;">
-            <span style="--index: 0;">CONNECTED</span>
-            <span style="--index: 1;">CONNECTED</span>
-            <span style="--index: 2;">CONNECTED</span>
-          </div>
+        <h1 class="absolute text-white fcfont text-3xl top-10">
+          CONNECTED
         </h1>
-        <!-- <div id="wait_text" class="wait_text absolute text-white font-Sanchez text-2xl">
-          <span>W</span><span>A</span><span>I</span><span>T</span><span>I</span><span>N</span><span>G</span>
-        </div> -->
-
         <img id="waitavatar_secretary" src="img/avatars/secretary_white.png" class="screen-avatar secretary" width="100px">
         <img id="waitavatar_szusi" src="img/avatars/szusi_white.png" class="screen-avatar szusi" width="140px">
+        <img id="waitavatar_fan" src="img/avatars/fan_white.png" class="screen-avatar fan" width="140px">
       </div>
 
       <!-- CHAT NOTIFICATION  -->
@@ -99,7 +89,7 @@
       
 
       <!-- VIDEO SCREEN-->
-      <div id="videoscreen" class="w-full h-full hidden">
+      <div id="videoscreen" class="relative flex justify-center items-center w-full h-full hidden bg-black">
         <video id="video_1" src="Videos/scaled_Alle_Dach_video.mp4" playsinline loop class="hidden video"></video>
         <video id="video_2" src="Videos/scaled_Andrei_1_video.mp4" playsinline loop class="hidden video"></video>
       </div>

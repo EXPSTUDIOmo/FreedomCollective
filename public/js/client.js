@@ -28,35 +28,58 @@
 //     document.getElementById('wait_text').style.transform = transformStyle;
 // }
 
+
+
 const avatarSecretary = document.getElementById('waitavatar_secretary');
 const avatarSzusi = document.getElementById('waitavatar_szusi');
+const avatarFan = document.getElementById('waitavatar_fan');
 
-// setTimeout(() => {
-//     setInterval(moveSecretary, 12000);
-// }, 6000);
+const WAIT_AVATARS = [avatarSecretary, avatarSzusi, avatarFan];
 
+let onWaitScreen = false;
+let avatarIndex = 0;
+let lastAvatarIndex = -1;
+let avatarTimeout;
 
-
-// setTimeout(() => {
-//     setInterval(moveSzusi, 12000);
-// }, 12000)
-
-
-function moveSecretary()
+function setOnWaitScreen(state)
 {
-    const randomX = Math.random() * 7;
-    const randomY = Math.random() * 9;
-    avatarSecretary.style.bottom = `${randomX}rem`;
-    avatarSecretary.style.right = `${randomY}rem`;
+    if(state == onWaitScreen)
+        return;
+
+    onWaitScreen = state;
+
+    if(onWaitScreen)
+    {
+        showNextAvatar();
+        avatarTimeout = setInterval(showNextAvatar, 12000);
+    }
+
+    else
+    {
+        clearInterval(avatarTimeout);
+
+        for(let ava of WAIT_AVATARS)
+        {
+            ava.classList.remove('screen-avatar-active');
+        }
+    }
 }
 
-function moveSzusi()
+function showNextAvatar()
 {
-    const randomX = Math.random() * 7;
-    const randomY = Math.random() * 9;
-    avatarSzusi.style.bottom = `${randomX}rem`;
-    avatarSzusi.style.right = `${randomY}rem`;
+    WAIT_AVATARS[avatarIndex].classList.add('screen-avatar-active');
+
+    if(lastAvatarIndex != -1)
+    {
+        WAIT_AVATARS[lastAvatarIndex].classList.remove('screen-avatar-active');
+    }
+    
+    lastAvatarIndex = avatarIndex;
+    avatarIndex = (avatarIndex + 1) % WAIT_AVATARS.length;
+
 }
+
+
 
 // setInterval(() => {
 //     randomTransform();
@@ -171,7 +194,10 @@ const socket = io({
     reconnectionAttempts: Infinity, 
     reconnectionDelay: 1000,   
     reconnectionDelayMax: 5000,
-    timeout: 20000,           });
+    timeout: 20000,  
+    query: {
+        admin: false
+    }});
 
 
 socket.on('connected', (state) => {
@@ -231,6 +257,8 @@ function loadScene(scene)
     stopAllSound();
     stopVideos();
 
+    setOnWaitScreen(scene === 0);
+
     switch(scene)
     {
         case 0:
@@ -238,14 +266,16 @@ function loadScene(scene)
             stopAllSound();
             numVideosInScene = VIDEO_SOURCES_POSES.length;
             stopVideos();
+
             break;
         case 1:
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
-            videoscreen.style.display = "block";
+            videoscreen.style.display = "flex";
             playVideo();
             playSound(0);
+
             break;
         case 2:
             waitscreen.style.display = "none";
@@ -254,12 +284,13 @@ function loadScene(scene)
             preloadVideo(3);
             showIncomingChat();
             playSound(1);
+  
             break;
         case 3:
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
-            videoscreen.style.display = "block";
+            videoscreen.style.display = "flex";
             numVideosInScene = VIDEO_SOURCES_DACH.length;
             playSound(2);
             playVideo();
@@ -436,9 +467,6 @@ function loadSounds(voiceid)
             incrementSFLoaded();
            }
     }); 
-    // SOUNDS[0] = loadSound(`Samples/PNO/PNO_H_${voiceid+1}.mp3`);
-    // SOUNDS[1] = loadSound(`Samples/NOT/NOT_H_${voiceid+1}.mp3`);
-    // SOUNDS[2] = loadSound(`Samples/FLT/FLT_H_${voiceid+1}.mp3`);
 }
 
 const SoundfilesToLoad = 3;
@@ -515,7 +543,7 @@ connectBtn.onclick = () =>
     setTimeout(() => {
         document.getElementById('startscreen').style.display = "none";
         document.getElementById('content').style.display = "flex";
-     
+        setOnWaitScreen(true);
     }, 1200)
 
     // wakelock
@@ -779,16 +807,6 @@ function DBG(msg)
      
 }
 
-
-function setColor(R,G,B)
-{
-    content.style.backgroundColor = `rgb(${R}, ${G}, ${B} )`;
-
-    for(let playp of pulses_play)
-    {
-        playp.style.borderColor = `rgb(${255 - R},${255 - G}, ${255 - B} )`;
-    }
-}
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);

@@ -4,13 +4,9 @@ module.exports = {
   theme: {
     extend: { 
       fontFamily: {
-      Glitching: ['Glitching', 'sans-serif'],
-      DoctorGlitch: ['DoctorGlitch', 'sans-serif'],
-      GlitchCode: ['GlitchCode', 'sans-serif'],
-      SolwayRegular: ['SolwayRegular', 'serif'],
-      SolwayBold: ['SolwayBold', 'serif'],
-      LoraVariable: ['LoraVariable', 'serif'],
-      Sanchez: ['Sanchez', 'serif']
+       Mynerve: ['Mynerve', 'serif'],
+       Baskervville: ['Baskervville', 'serif'],
+       Luckiest: ['Luckiest', 'serif']
     },
   },
   },
