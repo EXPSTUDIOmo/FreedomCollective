@@ -209,7 +209,7 @@ socket.on('activation', (state) => {
     {
         let sound = currentScene - 1;
         loadScene(currentScene);
-        SOUNDS[sound].currentTime = time;
+        SOUNDS[sound].seek(time);
         DBG(`jump to ${time} on sound ${sound}`);
     }
 });
@@ -403,23 +403,7 @@ function stopAllSound()
     for(let sound of SOUNDS)
     {
         sound.pause();
-        sound.currentTime = 0;
-    }
-}
-
-function playOrgan(pitch, velocity)
-{
-    if(velocity > 0)
-    {
-        ORGANSOUNDS[pitch].play();
-        ORGANSOUNDS[pitch].volume(velocity);
-        setColor(255,255,255);
-    }
-
-    else
-    {
-        ORGANSOUNDS[pitch].stop();
-        setColor(0,0,0);
+        sound.seek(0);
     }
 }
 

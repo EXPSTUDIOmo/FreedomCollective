@@ -1,0 +1,23 @@
+body {
+    background: linear-gradient(162deg, #00766c 0.79%, #720378 100%);
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    font-family: 'Sanchez';
+    color: white;
+}
+
+@font-face {
+    font-family: 'Sanchez';
+    src: url("fonts/Sanchez-Regular.ttf") format('truetype');
+}
+
+
+#control {
+ 
+}
+
+.control-button {
+    font-size: 2rem;
+    font-family: 'Sanchez';
+}

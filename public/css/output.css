@@ -1210,6 +1210,8 @@ html {
 
 .video {
   pointer-events: none;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .stack {

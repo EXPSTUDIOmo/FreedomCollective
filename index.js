@@ -17,12 +17,21 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const app = express();
-const http = require('http');
-const httpServer = http.createServer(app);
+const https = require('https');
+
+
+const sslOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
+};
+
+https.createServer(sslOptions, app).listen(443, () => {
+  console.log('Server running on port 443');
+});
 
 
 const { Server } = require("socket.io");
-const io = new Server(httpServer);
+const io = new Server(httpsServer);
 
 app.use(express.static('public'));
 
@@ -30,9 +39,36 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/max/admin/ping', (req, res) => {
+  let data = 'ping ';
+  data += `clients: ${clients.length} `;
+  data += `scene: ${currentScene} `;
+  data += `time: ${isPlaying ? Date.now() - lastStartTime : 0}`;
+  res.send(data);
+});
 
-httpServer.listen(3001, () => {
-  console.log('*** HTTP-SERVER ON PORT 3001 STARTED AND LISTENING ***');
+app.get('/max/admin/scene/1', (req, res) => {
+  loadScene(1);
+  res.send('start 1');
+});
+
+app.get('/max/admin/scene/2', (req, res) => {
+  loadScene(2);
+  res.send('start 2');
+});
+
+app.get('/max/admin/scene/3', (req, res) => {
+  loadScene(3);
+  res.send('start 3');
+});
+
+app.get('/max/admin/stop', (req, res) => {
+  stopPlayback();
+  res.send('stop');
+});
+
+httpsServer.listen(443, () => {
+  console.log('*** HTTPS-SERVER ON PORT 443 STARTED AND LISTENING ***');
 });
 
 
@@ -73,6 +109,8 @@ let isPlaying = false;
 // ********************** Socket.IO *************************
 io.on('connection', (socket) => {
 
+  console.log("new user");
+
   socket.voice = getNextVoice(); 
   socket.emit('connected', {voice: socket.voice});
   clients.push(socket);
@@ -90,6 +128,10 @@ io.on('connection', (socket) => {
 
  socket.on('ping', () => {
     socket.emit('pong');
+ })
+
+ socket.on('admin_start', () => {
+  loadScene(1);
  })
 
 });
@@ -124,9 +166,9 @@ oscServer.on('message', function (msg) {
   switch(AP)
   {
     case '/start':   
-      currentScene = msg[1];
-      loadScene(currentScene);
-      oscToMax.send('/server', `started scene ${currentScene}`);
+      let sceneToLoad = msg[1];
+      loadScene(sceneToLoad);
+      oscToMax.send('/server', `started scene ${sceneToLoad}`);
       break;
     
     case '/stop':
@@ -168,6 +210,9 @@ oscServer.on('message', function (msg) {
 
 function loadScene(scene)
 {
+
+  currentScene = scene;
+  
   if(scene === 0)
   {
     isPlaying = false;
@@ -187,7 +232,7 @@ function loadScene(scene)
 function stopPlayback()
 {
   isPlaying = false;
-
+  currentScene = 0;
   io.emit('stop');
 }
 

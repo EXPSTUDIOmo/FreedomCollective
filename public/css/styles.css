@@ -367,6 +367,7 @@ html {
 
 .video {
     pointer-events: none;
+    object-fit: cover;
 }
 
 
