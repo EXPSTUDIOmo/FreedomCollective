@@ -18,19 +18,19 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const https = require('https');
-
+const http = require('http');
 
 const sslOptions = {
   key: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
 };
 
-https.createServer(sslOptions, app).listen(3001, () => {
+http.createServer(app).listen(3001, () => {
   console.log('Server running on port 3001');
 });
 
 const { Server } = require("socket.io");
-const io = new Server(httpsServer);
+const io = new Server(httpServer);
 
 app.use(express.static('public'));
 
