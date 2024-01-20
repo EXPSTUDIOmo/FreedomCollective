@@ -25,10 +25,9 @@ const sslOptions = {
   cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
 };
 
-https.createServer(sslOptions, app).listen(443, () => {
-  console.log('Server running on port 443');
+https.createServer(sslOptions, app).listen(3001, () => {
+  console.log('Server running on port 3001');
 });
-
 
 const { Server } = require("socket.io");
 const io = new Server(httpsServer);
@@ -65,10 +64,6 @@ app.get('/max/admin/scene/3', (req, res) => {
 app.get('/max/admin/stop', (req, res) => {
   stopPlayback();
   res.send('stop');
-});
-
-httpsServer.listen(443, () => {
-  console.log('*** HTTPS-SERVER ON PORT 443 STARTED AND LISTENING ***');
 });
 
 
