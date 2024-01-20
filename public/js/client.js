@@ -73,7 +73,7 @@ function showNextAvatar()
     {
         WAIT_AVATARS[lastAvatarIndex].classList.remove('screen-avatar-active');
     }
-    
+
     lastAvatarIndex = avatarIndex;
     avatarIndex = (avatarIndex + 1) % WAIT_AVATARS.length;
 
@@ -257,8 +257,6 @@ function loadScene(scene)
     stopAllSound();
     stopVideos();
 
-    setOnWaitScreen(scene === 0);
-
     switch(scene)
     {
         case 0:
@@ -306,6 +304,8 @@ function showWaitScreen()
     incomingchat.style.display = "none";
     chatscreen.style.display = "none";
     waitscreen.style.display = "flex";
+
+    setOnWaitScreen(true);
 }
 
 
