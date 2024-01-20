@@ -36,6 +36,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/adminpanel', (req, res) => {
+  res.sendFile(__dirname + '/public/adminpanel.html');
+});
+
 app.get('/max/admin/ping', (req, res) => {
   let data = 'ping ';
   data += `clients: ${clients.length} `;
@@ -128,14 +132,13 @@ function addAdmin(socket)
 
   socket.emit('connected');
   sendStateToAdmins(socket);
-  
+
   socket.on('admin_stop', () => {
     stopPlayback();
     sendStateToAdmins(socket);
    })
   
    socket.on('admin_scene_1', () => {
-    console.log("admin start scene 1");
     loadScene(1);
     sendStateToAdmins(socket);
    })
