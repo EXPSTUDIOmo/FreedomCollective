@@ -20,10 +20,10 @@ const app = express();
 const https = require('https');
 const http = require('http');
 
-const sslOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
-};
+// const sslOptions = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
+// };
 
 http.createServer(app).listen(3001, () => {
   console.log('Server running on port 3001');
