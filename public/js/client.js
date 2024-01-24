@@ -163,19 +163,18 @@ const socket = io({
 
 socket.on('connected', (state) => {
     loadSounds(state.voice);
-    setInterval(ping, 1000);
 });
 
 let pingTimeout;
 
 function ping()
 {
-    socket.emit("ping");
-    pingTimeout = setTimeout(pingFailed, 4000);
+   
 }
 
 socket.on('pong', () => {
-    clearTimeout(pingTimeout);
+    SOUNDS[3].play();
+    console.log("server refresh");
 })
 
 function pingFailed()
@@ -386,7 +385,7 @@ function loadSounds(voiceid)
     SOUNDS[3] = new Howl({
         src: [`Samples/freedom-collective.mp3`],
         html5: true,
-        loop: true,
+        false: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -477,7 +476,7 @@ connectBtn.onclick = () =>
         return;
 
     unmuteWebAudio();
-    SOUNDS[3].play();
+   
 
 
 

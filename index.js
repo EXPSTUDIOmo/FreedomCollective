@@ -197,6 +197,17 @@ function addClient(socket)
 }
 
 
+function wakeClients()
+{
+  for(let client of clients)
+  {
+    client.emit('pong');
+  }
+}
+
+
+setInterval(wakeClients, 30000);
+
 // ================================= Client Control =========================
 
 function loadScene(scene)
@@ -227,12 +238,6 @@ function stopPlayback()
   io.emit('stop');
 }
 
-
-function setMode(mode)
-{ 
-  console.log("mode", mode);
-  io.emit('mode', mode);
-}
 
 
 function setClientColors(R,G,B)
