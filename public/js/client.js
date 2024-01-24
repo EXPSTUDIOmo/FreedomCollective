@@ -480,6 +480,8 @@ connectBtn.onclick = () =>
     unmuteWebAudio();
     SOUNDS[3].play();
 
+    
+
     goFullscreen();
     socket.emit("activate");
     // document.getElementById('connect_btn').style.color = "green";
