@@ -384,14 +384,14 @@ function loadSounds(voiceid)
            }
     }); 
 
-    // SOUNDS[3] = new Howl({
-    //     src: [`Samples/freedom-collective.mp3`],
-    //     html5: true,
-    //     loop: true,
-    //     onload: function() {
-    //         incrementSFLoaded();
-    //        }
-    // }); 
+    SOUNDS[3] = new Howl({
+        src: [`Samples/freedom-collective.mp3`],
+        html5: true,
+        loop: true,
+        onload: function() {
+            incrementSFLoaded();
+           }
+    }); 
 }
 
 
@@ -419,7 +419,7 @@ function unmuteWebAudio()
     }
 }
 
-const SoundfilesToLoad = 3;
+const SoundfilesToLoad = 4;
 let soundfilesLoaded = 0;
 
 function incrementSFLoaded()
@@ -478,6 +478,7 @@ connectBtn.onclick = () =>
         return;
 
     unmuteWebAudio();
+    SOUNDS[3].play();
 
     goFullscreen();
     socket.emit("activate");
