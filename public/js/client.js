@@ -204,7 +204,6 @@ socket.on('disconnect', (data) => {
 
 socket.on('start', (scene) => {
     loadScene(scene);
-    socket.emit("client-scene", scene);
 });
 
 socket.on('stop', () => {
@@ -480,7 +479,7 @@ connectBtn.onclick = () =>
     unmuteWebAudio();
     SOUNDS[3].play();
 
-    
+
 
     goFullscreen();
     socket.emit("activate");

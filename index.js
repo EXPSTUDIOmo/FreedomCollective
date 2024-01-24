@@ -194,9 +194,6 @@ function addClient(socket)
     socket.emit('pong');
  })
 
-  socket.on('client-scene', (scene) => {
-    console.log(scene);
-  });
 }
 
 
