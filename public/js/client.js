@@ -8,26 +8,6 @@
     Client
 */
 
-// function shuffleArray(array) {
-//     for (let i = array.length - 1; i > 0; i--) {
-//         // Generate a random index lower than the current element
-//         const j = Math.floor(Math.random() * (i + 1));
-
-//         // Swap elements at indices i and j
-//         [array[i], array[j]] = [array[j], array[i]];
-//     }
-//     return array;
-// }
-
-// function randomTransform() {
-//     const randomX = Math.floor(Math.random() * 200) - 100; // Random X translation
-//     const randomY = Math.floor(Math.random() * 200) - 100; // Random Y translation
-//     const randomRotation = Math.floor(Math.random() * 180) -90; // Random rotation
-
-//     const transformStyle = `translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
-//     document.getElementById('wait_text').style.transform = transformStyle;
-// }
-
 
 
 const avatarSecretary = document.getElementById('waitavatar_secretary');
@@ -80,20 +60,6 @@ function showNextAvatar()
 }
 
 
-
-// setInterval(() => {
-//     randomTransform();
-// }, 4000);
-/*
-    CSS PRECALCS
-*/
-// let letterDelays = [0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8];
-// shuffleArray(letterDelays);
-
-// document.querySelectorAll('.wait_text span').forEach((span, idx) => {
-
-//     span.style.animationDelay = `${letterDelays[idx]}s`;
-// });
 
 /*
 Debug Flag, wenn activ wird die DBG() Funktion ausgeführt, so kann man schnell global 
@@ -159,11 +125,6 @@ videoscreen.addEventListener('click', () => {
 
 
 
-
-
-
-
-
 /*
     Prevent the user screen from turning off.
     Either by wakeLock API or if not supported (Firefox) by NoSleep.js => which might be buggy, have to check
@@ -204,7 +165,6 @@ socket.on('connected', (state) => {
     loadSounds(state.voice);
     setInterval(ping, 1000);
 });
-
 
 let pingTimeout;
 
@@ -442,7 +402,8 @@ let loadTimeout;
 
 function loadSounds(voiceid)
 {
-
+    console.log("Load Soundfiles");
+    
     SOUNDS[0] = new Howl({
         src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
         html5: true,
