@@ -8,7 +8,7 @@
     Client
 */
 
-
+let currentScene = 0;
 
 const avatarSecretary = document.getElementById('waitavatar_secretary');
 const avatarSzusi = document.getElementById('waitavatar_szusi');
@@ -193,10 +193,7 @@ socket.on('activation', (state) => {
 
     if(isPlaying)
     {
-        let sound = currentScene - 1;
-        loadScene(currentScene);
-        SOUNDS[sound].seek(time);
-        DBG(`jump to ${time} on sound ${sound}`);
+        loadScene(currentScene, time);
     }
 });
 
@@ -206,16 +203,19 @@ socket.on('disconnect', (data) => {
 });   
 
 socket.on('start', (scene) => {
-    
     loadScene(scene);
+    socket.emit("client-scene", scene);
+});
+
+socket.on('stop', () => {
+    loadScene(0);
 });
 
 
-function loadScene(scene)
+
+function loadScene(scene, time = 0)
 {
     currentScene = scene;
-    stopAllSound();
-    stopVideos();
 
     switch(scene)
     {
@@ -224,15 +224,17 @@ function loadScene(scene)
             stopAllSound();
             numVideosInScene = VIDEO_SOURCES_POSES.length;
             stopVideos();
-
+            resetChat();
+            IsInChat = false;
             break;
         case 1:
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
             videoscreen.style.display = "flex";
+            IsInChat = false;
             playVideo();
-            playSound(0);
+            playSound(0, time);
 
             break;
         case 2:
@@ -241,7 +243,8 @@ function loadScene(scene)
             chatscreen.style.display = "none";
             preloadVideo(3);
             showIncomingChat();
-            playSound(1);
+            displayChat(time);
+            playSound(1, time);
   
             break;
         case 3:
@@ -249,13 +252,16 @@ function loadScene(scene)
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
             videoscreen.style.display = "flex";
+            IsInChat = false;
             numVideosInScene = VIDEO_SOURCES_DACH.length;
-            playSound(2);
+            playSound(2, time);
             playVideo();
             break;
         default:
             break;
     }
+
+    
 }
 
 function showWaitScreen()
@@ -269,49 +275,6 @@ function showWaitScreen()
 }
 
 
-socket.on('stop', () => {
-    showWaitScreen();
-    stopAllSound();
-    stopVideos();
-});
-
-socket.on('color', (R,G,B) => {
-    setColor(R,G,B);
-});
-
-
-socket.on('mode', (mode) => {
-
-    if(mode == "playback")
-    {
-        content.style.transition = "10s ease";
-    }
-
-    else if(mode == 'organ')
-    {
-        content.style.transition = "0.1s ease";
-    }
-})
-
-socket.on('organ', (data) => {
-    playOrgan(data.pitch, data.velocity);
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -322,12 +285,13 @@ socket.on('organ', (data) => {
 */
 
 let SOUNDS = [];
-let ORGANSOUNDS = [];
-let currentScene = 0;
 
-function playSound(sound)
+
+function playSound(sound, time = 0)
 {
     SOUNDS[sound].play();
+    SOUNDS[sound].seek(time);
+    console.log("playing sound", sound, time);
 }
 
 let currentlyActivePlayer = 1;
@@ -379,22 +343,16 @@ function playVideo()
 
 function stopVideos()
 {
-    
+    video_1.pause();
+    video_2.pause();
 }
 
-function stopSound()
-{
-    SOUNDS[currentScene - 1].pause();
-
-    DBG(`stopping sound ${currentScene - 1}`);
-}
 
 function stopAllSound()
 {
     for(let sound of SOUNDS)
     {
-        sound.pause();
-        sound.seek(0);
+        sound.stop();
     }
 }
 
@@ -403,10 +361,9 @@ let loadTimeout;
 function loadSounds(voiceid)
 {
     console.log("Load Soundfiles");
-    
+
     SOUNDS[0] = new Howl({
         src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
-        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -415,7 +372,6 @@ function loadSounds(voiceid)
 
     SOUNDS[1] = new Howl({
         src: [`Samples/NOT/NOT_H_${voiceid+1}.mp3`],
-        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -423,11 +379,44 @@ function loadSounds(voiceid)
 
     SOUNDS[2] = new Howl({
         src: [`Samples/FLT/FLT_H_${voiceid+1}.mp3`],
-        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
     }); 
+
+    // SOUNDS[3] = new Howl({
+    //     src: [`Samples/freedom-collective.mp3`],
+    //     html5: true,
+    //     loop: true,
+    //     onload: function() {
+    //         incrementSFLoaded();
+    //        }
+    // }); 
+}
+
+
+
+function unmuteWebAudio()
+{
+        // Create an audio context instance if WebAudio is supported
+    let context = (window.AudioContext || window.webkitAudioContext) ?
+    new (window.AudioContext || window.webkitAudioContext)() : null;
+
+    // Decide on some parameters
+    let allowBackgroundPlayback = true; // default false, recommended false
+    let forceIOSBehavior = false; // default false, recommended false
+    // Pass it to unmute if the context exists... ie WebAudio is supported
+    if (context)
+    {
+        // If you need to be able to disable unmute at a later time, you can use the returned handle's dispose() method
+        // if you don't need to do that (most folks won't) then you can simply ignore the return value
+        let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
+
+        // ... at some later point you wish to STOP unmute control
+        unmuteHandle.dispose();
+        unmuteHandle = null;
+        console.log("Web Audio unmuted");
+    }
 }
 
 const SoundfilesToLoad = 3;
@@ -446,31 +435,31 @@ function incrementSFLoaded()
 
 
 
-function loadSound(url, retryCount = 0) {
-    const maxRetries = 5; // Set a max number of retries to avoid infinite loops
-    const audio = new Audio(url);
+// function loadSound(url, retryCount = 0) {
+//     const maxRetries = 5; // Set a max number of retries to avoid infinite loops
+//     const audio = new Audio(url);
    
-    audio.addEventListener('error', () => {
-        console.error(`Error loading sound file: ${url}`);
+//     audio.addEventListener('error', () => {
+//         console.error(`Error loading sound file: ${url}`);
 
-        if (retryCount < maxRetries) {
-            console.log(`Attempting to reload sound file. Retry ${retryCount + 1}`);
-            loadSound(url, retryCount + 1); // Retry loading the sound
-        } else {
-            location.reload();
-            console.error("ERROR LOADING SOUNDFILES");
-            // Handle the failure, perhaps by notifying the user or disabling sound-related functionality
-        }
-    });
+//         if (retryCount < maxRetries) {
+//             console.log(`Attempting to reload sound file. Retry ${retryCount + 1}`);
+//             loadSound(url, retryCount + 1); // Retry loading the sound
+//         } else {
+//             location.reload();
+//             console.error("ERROR LOADING SOUNDFILES");
+//             // Handle the failure, perhaps by notifying the user or disabling sound-related functionality
+//         }
+//     });
 
-    audio.addEventListener('canplaythrough', () => {
-        // The entire audio is likely to play without interruption
-        incrementSFLoaded();
-    });
+//     audio.addEventListener('canplaythrough', () => {
+//         // The entire audio is likely to play without interruption
+//         incrementSFLoaded();
+//     });
 
-    audio.load();
-    return audio;
-}
+//     audio.load();
+//     return audio;
+// }
 
 
 
@@ -487,6 +476,8 @@ connectBtn.onclick = () =>
 {
     if(isConnected)
         return;
+
+    unmuteWebAudio();
 
     goFullscreen();
     socket.emit("activate");
@@ -582,11 +573,7 @@ let IsInChat = false;
 
 function showIncomingChat()
 {
-    if(IsInChat)
-        return;
-
     document.getElementById('incomingchat').style.display = "flex";
-    displayChat();
 }
 
 
@@ -602,6 +589,28 @@ incomingchat.addEventListener('click', () => {
     IsInChat = true;
 });
 
+
+
+
+let ChatTimeouts = [];
+let chatMessageIndex = 0;
+let waitTime = 0;
+let lastMessage;
+
+
+function resetChat()
+{
+    chatMessageIndex = 0;
+
+    for(let timeout of ChatTimeouts)
+    {
+        clearTimeout(timeout);
+    }
+
+    chatcontent.innerHTML = "";
+    ChatTimeouts = [];
+    waitTime = 0;
+}
 
 function createChatMessage(side, repost, msg)
 {
@@ -656,14 +665,13 @@ function postChatMessage(msg)
     chatcontent.scrollTop = chatcontent.scrollHeight;
 }
 
-let waitTime = 0;
-let lastMessage;
-
-function displayChat()
+function displayChat(time = 0)
 {
+    chatStartOffset = time;
     scheduleChatMessage(0, 'new', 'left', false, 'Miss you babe 😘');
-    scheduleChatMessage(10, 'new', 'right', false, 'Zsuzsi?');
-    scheduleChatMessage(2, 'new', 'left', false, '<div class="dots"></div>');
+    scheduleChatMessage(7, 'new', 'right', false, '<div class="dots"></div>');
+    scheduleChatMessage(7, 'update', 'right', false, 'Zsuzsi?');
+    scheduleChatMessage(10, 'new', 'left', false, '<div class="dots"></div>');
     scheduleChatMessage(4, 'update', 'left', false, 'Last night was so 🐽 💦 😹 😻 ❤️‍🔥');
     scheduleChatMessage(4, 'new', 'right', false, '<div class="dots"></div>');
     scheduleChatMessage(3, 'update', 'right', false, 'Ermmm…');
@@ -696,61 +704,38 @@ function displayChat()
 }
 
 
-
+let chatStartOffset = 0;
 
 function scheduleChatMessage(time, type, side, report, msg)
 {
     waitTime += time;
+    let realWaitTime = Math.max(0,waitTime - chatStartOffset);
 
     if(type == 'new')
     {
         let newMsg = createChatMessage(side, report, msg);
 
-        setTimeout(() => {
+        ChatTimeouts[chatMessageIndex] = setTimeout(() => {
             postChatMessage(newMsg);
-        }, waitTime * 1000);
-
+        }, realWaitTime * 1000);
+        chatMessageIndex++;
         lastMessage = newMsg;
         
     }
 
     else
     {
-        setTimeout(() => { 
+        ChatTimeouts[chatMessageIndex] = setTimeout(() => { 
             let lastDiv = document.querySelector('#chatcontent > div:last-child');
             let p = lastDiv.querySelector('p');
             p.innerHTML = msg;
             chatcontent.scrollTop = chatcontent.scrollHeight;
-        }, waitTime * 1000);
-    
+        }, realWaitTime * 1000);
+        chatMessageIndex++;
     }
 
     
 }
-
-
-
-/*
-<div class="chatmessage mr-2 ml-auto">
-            <h1 class="text-white text-2xl ml-2 text-right">KARL</h1>
-            <div class="chatbubble_b bg-white">
-              <p class="text-black text-3xl from-me"> Zsuzsi?</p>
-            </div>
-          </div>
-*/
-
-/*
-    <div class="chatmessage mb-3">
-            <h1 class="text-white text-2xl ml-2">SZUSI</h1>
-            <div class="chatbubble_a bg-white">
-              <p class="text-black text-3xl">Miss you babe 😘</p>
-            </div>
-          </div>
-*/
-
-
-
-
 
 
 
