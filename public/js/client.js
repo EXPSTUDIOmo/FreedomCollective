@@ -402,7 +402,7 @@ function unmuteWebAudio()
     new (window.AudioContext || window.webkitAudioContext)() : null;
 
     // Decide on some parameters
-    let allowBackgroundPlayback = true; // default false, recommended false
+    let allowBackgroundPlayback = false; // default false, recommended false
     let forceIOSBehavior = false; // default false, recommended false
     // Pass it to unmute if the context exists... ie WebAudio is supported
     if (context)
