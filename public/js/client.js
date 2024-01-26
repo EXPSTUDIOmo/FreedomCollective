@@ -172,9 +172,10 @@ function ping()
    
 }
 
+let dummyCounter = 0;
 socket.on('pong', () => {
     SOUNDS[3].play();
-    console.log("server refresh");
+    dummyCounter += 1;
 })
 
 function pingFailed()

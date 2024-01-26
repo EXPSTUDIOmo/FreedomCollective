@@ -206,7 +206,7 @@ function wakeClients()
 }
 
 
-setInterval(wakeClients, 30000);
+setInterval(wakeClients, 10000);
 
 // ================================= Client Control =========================
 
