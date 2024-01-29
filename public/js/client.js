@@ -9,12 +9,17 @@
 */
 
 let currentScene = 0;
+let isPlaying = false;
+const connectionStatus = document.getElementById('connectionStatus');
+const videoHint = document.getElementById('video_tab_hint');
 
 const avatarSecretary = document.getElementById('waitavatar_secretary');
 const avatarSzusi = document.getElementById('waitavatar_szusi');
 const avatarFan = document.getElementById('waitavatar_fan');
+const avatarKarl = document.getElementById('waitavatar_karl');
+const avatarAndre = document.getElementById('waitavatar_andre');
 
-const WAIT_AVATARS = [avatarSecretary, avatarSzusi, avatarFan];
+const WAIT_AVATARS = [avatarSecretary, avatarSzusi, avatarFan, avatarKarl, avatarAndre];
 
 let onWaitScreen = false;
 let avatarIndex = 0;
@@ -118,6 +123,7 @@ let numVideosInScene = VIDEO_SOURCES_POSES.length;
 
 videoscreen.addEventListener('click', () => {
     playVideo();
+    videoHint.style.display = "none";
 })
 
 
@@ -163,6 +169,7 @@ const socket = io({
 
 socket.on('connected', (state) => {
     loadSounds(state.voice);
+    connectionStatus.innerHTML = "CONNECTED";
 });
 
 let pingTimeout;
@@ -186,20 +193,18 @@ function pingFailed()
 }
 
 socket.on('activation', (state) => {
-    let isPlaying = state.playing;
-    let time = state.time;
-    currentScene = state.scene;
-    preloadVideo(currentScene);
 
-    if(isPlaying)
-    {
-        loadScene(currentScene, time);
-    }
+    if(currentScene == state.scene || !isConnected)
+        return;
+
+    preloadVideo(currentScene);
+    loadScene(currentScene, state.time);
+    
 });
 
 socket.on('disconnect', (data) => {
     isConnected = false;
-    DBG("disconnected from server. please refresh the page");
+    connectionStatus.innerHTML = "DISCONNECTED! <p class='text-2xl'>Try reloading the page</p>";
 });   
 
 socket.on('start', (scene) => {
@@ -207,13 +212,18 @@ socket.on('start', (scene) => {
 });
 
 socket.on('stop', () => {
-    loadScene(0);
+
+    if(currentScene != 0)
+        loadScene(0);
 });
 
 
 
 function loadScene(scene, time = 0)
 {
+    if(currentScene == scene)
+        return;
+
     currentScene = scene;
 
     switch(scene)
@@ -225,16 +235,17 @@ function loadScene(scene, time = 0)
             stopVideos();
             resetChat();
             IsInChat = false;
+            isPlaying = false;
             break;
         case 1:
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
-            videoscreen.style.display = "flex";
+            showVideoScreen();
             IsInChat = false;
             playVideo();
             playSound(0, time);
-
+            isPlaying = true;
             break;
         case 2:
             waitscreen.style.display = "none";
@@ -244,17 +255,19 @@ function loadScene(scene, time = 0)
             showIncomingChat();
             displayChat(time);
             playSound(1, time);
-  
+            isPlaying = true;
             break;
         case 3:
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
-            videoscreen.style.display = "flex";
+            preloadVideo(3);
+            showVideoScreen();
             IsInChat = false;
             numVideosInScene = VIDEO_SOURCES_DACH.length;
             playSound(2, time);
             playVideo();
+            isPlaying = true;
             break;
         default:
             break;
@@ -263,18 +276,50 @@ function loadScene(scene, time = 0)
     
 }
 
+let inFadeAnimation = false;
+
 function showWaitScreen()
 {
-    videoscreen.style.display = "none";
-    incomingchat.style.display = "none";
-    chatscreen.style.display = "none";
-    waitscreen.style.display = "flex";
+    if(isPlaying)
+    {
+        inFadeAnimation = true;
+        content.classList.add('fadeOutContent');
 
-    setOnWaitScreen(true);
+        setTimeout(() => {
+            videoscreen.style.display = "none";
+            incomingchat.style.display = "none";
+            chatscreen.style.display = "none";
+            waitscreen.style.display = "flex";
+            setOnWaitScreen(true);
+            content.classList.remove('fadeOutContent');
+            inFadeAnimation = false;
+        }, 3800);
+    }
+
+    else if(!isPlaying && !inFadeAnimation)
+    {
+        videoscreen.style.display = "none";
+        incomingchat.style.display = "none";
+        chatscreen.style.display = "none";
+        waitscreen.style.display = "flex";
+    
+        setOnWaitScreen(true);
+    }
+   
 }
 
 
+function showVideoScreen()
+{
+    videoscreen.style.display = "flex";
+    videoHint.style.display = "block";
+    videoHint.classList.add('video_hint_anim');
 
+    setTimeout(() => {
+        videoHint.classList.remove('video_hint_anim');
+    }, 4100);
+
+}
 
 
 /*
@@ -290,7 +335,6 @@ function playSound(sound, time = 0)
 {
     SOUNDS[sound].play();
     SOUNDS[sound].seek(time);
-    console.log("playing sound", sound, time);
 }
 
 let currentlyActivePlayer = 1;
@@ -338,6 +382,8 @@ function playVideo()
 
         currentlyActivePlayer = 0;
     }
+
+    
 }
 
 function stopVideos()
@@ -349,9 +395,9 @@ function stopVideos()
 
 function stopAllSound()
 {
-    for(let sound of SOUNDS)
+    for(let i = 0; i < SOUNDS.length; ++i)
     {
-        sound.stop();
+        SOUNDS[i].stop();
     }
 }
 
@@ -359,7 +405,6 @@ let loadTimeout;
 
 function loadSounds(voiceid)
 {
-    console.log("Load Soundfiles");
 
     SOUNDS[0] = new Howl({
         src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
@@ -397,7 +442,7 @@ function loadSounds(voiceid)
 
 function unmuteWebAudio()
 {
-        // Create an audio context instance if WebAudio is supported
+    // Create an audio context instance if WebAudio is supported
     let context = (window.AudioContext || window.webkitAudioContext) ?
     new (window.AudioContext || window.webkitAudioContext)() : null;
 
@@ -414,9 +459,10 @@ function unmuteWebAudio()
         // ... at some later point you wish to STOP unmute control
         unmuteHandle.dispose();
         unmuteHandle = null;
-        console.log("Web Audio unmuted");
     }
 }
+
+
 
 const SoundfilesToLoad = 4;
 let soundfilesLoaded = 0;
@@ -549,7 +595,6 @@ function detectMobile() {
 
 function enableNoSleep()
 {
-    console.log("No sleep");
     noSleep.enable();
 }
 

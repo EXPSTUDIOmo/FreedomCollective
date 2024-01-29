@@ -113,6 +113,17 @@ html {
     left: 6rem;
 }
 
+.karl {
+    bottom: 4rem;
+    right: 1rem;
+}
+
+.andre {
+    bottom: 5rem;
+    left: 1rem;
+}
+
+
 @keyframes avatar {
     0%, 15% {
         opacity: 0;
@@ -131,7 +142,35 @@ html {
 }
 
 
-/* HTML: <div class="loader"></div> */
+.fadeOutContent {
+    animation: fade_out_opacity 3s ease forwards;
+    animation-iteration-count: 1;
+}
+
+
+@keyframes fade_out_opacity {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fade_in_opacity {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+
 .loader {
     width: 50px;
     aspect-ratio: 1;
@@ -426,5 +465,29 @@ html {
 
     76%, 100% {
         filter: blur(2px);
+    }
+}
+
+
+#video_tab_hint {
+    user-select: none;
+    pointer-events: none;
+    z-index: 10;
+    bottom: 1rem;
+}
+
+
+.video_hint_anim {
+    opacity: 0;
+    animation: showhint 4s 1 ease;
+}
+
+@keyframes showhint {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }

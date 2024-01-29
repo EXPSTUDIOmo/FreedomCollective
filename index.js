@@ -107,6 +107,7 @@ let isPlaying = false;
 
 
 
+
 // ********************** Socket.IO *************************
 io.on('connection', (socket) => {
 
@@ -208,6 +209,43 @@ function wakeClients()
 
 setInterval(wakeClients, 10000);
 
+
+
+let STOP_INTERVAL;
+let RETRIGGER_INTERVAL;
+
+function setPlayState(state)
+{
+  isPlaying = state;
+
+  if(state === true)
+  {
+    clearInterval(STOP_INTERVAL);
+    RETRIGGER_INTERVAL = setInterval(reassureClientPlayback, 2000);
+  }
+
+  else
+  {
+    clearInterval(RETRIGGER_INTERVAL);
+    STOP_INTERVAL = setInterval(keepClientsSilent, 2000);
+  }
+}
+
+setPlayState(false); // activates the "quiet silence" function that makes sure no one plays anything before its time
+
+
+function keepClientsSilent()
+{
+  io.emit('stop');
+}
+
+
+function reassureClientPlayback()
+{
+  let timeToJump = isPlaying ? (Date.now() - lastStartTime) / 1000 : 0; 
+  io.emit("activation", { playing: isPlaying, scene: currentScene, time: timeToJump});
+}
+
 // ================================= Client Control =========================
 
 function loadScene(scene)
@@ -217,13 +255,13 @@ function loadScene(scene)
   
   if(scene === 0)
   {
-    isPlaying = false;
+    setPlayState(false);
   }
 
   else
   {
     lastStartTime = Date.now();
-    isPlaying = true;
+    setPlayState(true);
   }
 
   io.emit('start', scene);
@@ -233,16 +271,9 @@ function loadScene(scene)
 
 function stopPlayback()
 {
-  isPlaying = false;
+  setPlayState(false);
   currentScene = 0;
   io.emit('stop');
-}
-
-
-
-function setClientColors(R,G,B)
-{
-  io.emit('color', R,G,B);
 }
 
 

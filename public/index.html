@@ -44,12 +44,14 @@
 
       <!-- WAITSCREEN -->
       <div id="waitscreen" class="relative flex justify-center items-center w-screen h-screen">
-        <h1 class="absolute text-white fcfont text-3xl top-10">
+        <h1 id="connectionStatus" class="absolute text-white text-center fcfont text-3xl top-10">
           CONNECTED
         </h1>
         <img loading="lazy" id="waitavatar_secretary" src="img/avatars/secretary_white.png" class="screen-avatar secretary" width="100px">
         <img loading="lazy" id="waitavatar_szusi" src="img/avatars/szusi_white.png" class="screen-avatar szusi" width="140px">
         <img loading="lazy" id="waitavatar_fan" src="img/avatars/fan_white.png" class="screen-avatar fan" width="140px">
+        <img loading="lazy" id="waitavatar_karl" src="img/avatars/karl_white.png" class="screen-avatar karl" width="100px">
+        <img loading="lazy" id="waitavatar_andre" src="img/avatars/andre_white.png" class="screen-avatar andre" width="140px">
       </div>
 
       <!-- CHAT NOTIFICATION  -->
@@ -70,7 +72,7 @@
             <div id="chatavatar" class="rounded-full w-16 h-16 border-solid border border-white">
               <img loading="lazy" src="img/avtarszusi.png" class="w-full h-full rounded-full">
             </div>
-            <h1 class="text-white text-3xl ml-4">ZSUZSI</h1>
+            <h1 class="text-white text-3xl ml-4 fcfont">ZSUZSI</h1>
           </div>
           
           <div class="flex items-center space-x2">
@@ -88,6 +90,7 @@
 
       <!-- VIDEO SCREEN-->
       <div id="videoscreen" class="relative flex justify-center items-center w-full h-full hidden bg-black">
+        <div id="video_tab_hint" class="hidden absolute fcfont text-white text-center text-2xl">Tab on video</div>
         <video id="video_1" src="Videos/scaled_Alle_Dach_video.mp4" playsinline loop class="hidden video"></video>
         <video id="video_2" src="Videos/scaled_Andrei_1_video.mp4" playsinline loop class="hidden video"></video>
       </div>
