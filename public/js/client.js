@@ -281,31 +281,31 @@ let inFadeAnimation = false;
 
 function showWaitScreen()
 {
-    if(isPlaying)
-    {
-        inFadeAnimation = true;
-        content.classList.add('fadeOutContent');
+    // if(isPlaying)
+    // {
+    //     inFadeAnimation = true;
+    //     content.classList.add('fadeOutContent');
 
-        setTimeout(() => {
-            videoscreen.style.display = "none";
-            incomingchat.style.display = "none";
-            chatscreen.style.display = "none";
-            waitscreen.style.display = "flex";
-            setOnWaitScreen(true);
-            content.classList.remove('fadeOutContent');
-            inFadeAnimation = false;
-        }, 3800);
-    }
+    //     setTimeout(() => {
+    //         videoscreen.style.display = "none";
+    //         incomingchat.style.display = "none";
+    //         chatscreen.style.display = "none";
+    //         waitscreen.style.display = "flex";
+    //         setOnWaitScreen(true);
+    //         content.classList.remove('fadeOutContent');
+    //         inFadeAnimation = false;
+    //     }, 3800);
+    // }
 
-    else if(!isPlaying && !inFadeAnimation)
-    {
+    // else if(!isPlaying && !inFadeAnimation)
+    // {
         videoscreen.style.display = "none";
         incomingchat.style.display = "none";
         chatscreen.style.display = "none";
         waitscreen.style.display = "flex";
     
         setOnWaitScreen(true);
-    }
+    // }
    
 }
 
