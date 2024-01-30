@@ -225,6 +225,7 @@ function loadScene(scene, time = 0)
         return;
 
     currentScene = scene;
+    stopAllSound();
 
     switch(scene)
     {
