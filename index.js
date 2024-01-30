@@ -21,11 +21,6 @@ const https = require('https');
 const http = require('http');
 const httpServer = http.createServer(app);
 
-// const sslOptions = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/freedom-collective.de/fullchain.pem')
-// };
-
 
 const { Server } = require("socket.io");
 const io = new Server(httpServer);
