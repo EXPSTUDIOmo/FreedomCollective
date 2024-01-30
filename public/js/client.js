@@ -409,6 +409,7 @@ function loadSounds(voiceid)
 
     SOUNDS[0] = new Howl({
         src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
+        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
