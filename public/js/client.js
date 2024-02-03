@@ -228,6 +228,8 @@ function loadScene(scene, time = 0)
     currentScene = scene;
     stopAllSound();
 
+    
+
     switch(scene)
     {
         case 0:
