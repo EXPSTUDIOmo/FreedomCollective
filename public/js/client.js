@@ -89,26 +89,35 @@ const video_2 = document.getElementById('video_2');
 
 const VIDEO_SOURCES_POSES = 
 [
-    'scaled_Alle_Dach_video.mp4',
-    'scaled_Andrei_1_video.mp4',
     'scaled_Andrei_2_video.mp4',
-    'scaled_Andrei_Foyer_Nebel_video.mp4',
-    'scaled_Andrei_Zwischendach_1_video.mp4',
-    'scaled_Andrei_Zwischendach_2_video.mp4',
     'scaled_Fan_1_video.mp4',
-    'scaled_Fan_2_video.mp4',
-    'scaled_Karl_1_video.mp4',
     'scaled_Karl_2_video.mp4',
-    'scaled_Opponent_Markus_1_video.mp4',
-    'scaled_Opponent_Martin_1_video.mp4',
-    'scaled_Opponent_Martin_2_video.mp4',
-    'scaled_Secretary_1_video.mp4',
     'scaled_Secretary_2_video.mp4',
-    'scaled_Secretary_3_video.mp4',
     'scaled_Zsuzsi_1_video.mp4',
-    'scaled_Zsuzsi_4_video.mp4'
 ];
 
+
+// const VIDEO_SOURCES_POSES = 
+// [
+//     'scaled_Alle_Dach_video.mp4',
+//     'scaled_Andrei_1_video.mp4',
+//     'scaled_Andrei_2_video.mp4',
+//     'scaled_Andrei_Foyer_Nebel_video.mp4',
+//     'scaled_Andrei_Zwischendach_1_video.mp4',
+//     'scaled_Andrei_Zwischendach_2_video.mp4',
+//     'scaled_Fan_1_video.mp4',
+//     'scaled_Fan_2_video.mp4',
+//     'scaled_Karl_1_video.mp4',
+//     'scaled_Karl_2_video.mp4',
+//     'scaled_Opponent_Markus_1_video.mp4',
+//     'scaled_Opponent_Martin_1_video.mp4',
+//     'scaled_Opponent_Martin_2_video.mp4',
+//     'scaled_Secretary_1_video.mp4',
+//     'scaled_Secretary_2_video.mp4',
+//     'scaled_Secretary_3_video.mp4',
+//     'scaled_Zsuzsi_1_video.mp4',
+//     'scaled_Zsuzsi_4_video.mp4'
+// ];
 
 const VIDEO_SOURCES_DACH = 
 [
@@ -448,7 +457,6 @@ function loadSounds(voiceid)
 
     SOUNDS[3] = new Howl({
         src: [`Samples/freedom-collective.mp3`],
-        html5: true,
         false: true,
         onload: function() {
             incrementSFLoaded();
