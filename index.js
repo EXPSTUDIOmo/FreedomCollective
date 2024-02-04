@@ -216,12 +216,14 @@ function setPlayState(state)
   if(state === true)
   {
     clearInterval(STOP_INTERVAL);
-    //RETRIGGER_INTERVAL = setInterval(reassureClientPlayback, 2000);
+    clearInterval(RETRIGGER_INTERVAL);
+    RETRIGGER_INTERVAL = setInterval(reassureClientPlayback, 2000);
   }
 
   else
   {
     clearInterval(RETRIGGER_INTERVAL);
+    clearInterval(STOP_INTERVAL);
     STOP_INTERVAL = setInterval(keepClientsSilent, 2000);
   }
 }

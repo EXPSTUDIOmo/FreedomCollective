@@ -197,7 +197,7 @@ socket.on('activation', (state) => {
     if(currentScene == state.scene || !isConnected)
         return;
 
-    console.log("activate", state.scene, currentScene);
+
     preloadVideo(state.scene);
     loadScene(state.scene, state.time);
     
@@ -214,12 +214,13 @@ socket.on('start', (scene) => {
 
 socket.on('stop', () => {
 
-    console.log("STOP");
     if(currentScene != 0)
         loadScene(0);
 });
 
-
+socket.on('silent', () => {
+    console.log("silent");
+});
 
 function loadScene(scene, time = 0)
 {
