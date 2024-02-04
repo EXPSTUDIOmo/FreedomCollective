@@ -970,7 +970,7 @@ html {
 }
 
 .fadeOutContent {
-  animation: fade_out_opacity 3s ease forwards;
+  animation: fade_out_opacity 6s ease forwards;
   animation-iteration-count: 1;
 }
 
@@ -979,8 +979,12 @@ html {
     opacity: 1;
   }
 
-  100% {
+  50%, 66% {
     opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 

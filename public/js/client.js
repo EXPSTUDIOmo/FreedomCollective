@@ -230,7 +230,13 @@ function loadScene(scene, time = 0)
     currentScene = scene;
     stopAllSound();
 
-    
+    if(inFadeAnimation)
+    {
+        content.classList.remove('fadeOutContent');
+        clearTimeout(fadeTimeOut);
+        clearTimeout(fadeInTimeOut);
+        inFadeAnimation = false;
+    }
 
     switch(scene)
     {
@@ -283,34 +289,40 @@ function loadScene(scene, time = 0)
 }
 
 let inFadeAnimation = false;
+let fadeTimeOut;
+let fadeInTimeOut;
 
 function showWaitScreen()
 {
-    // if(isPlaying)
-    // {
-    //     inFadeAnimation = true;
-    //     content.classList.add('fadeOutContent');
+    if(isPlaying)
+    {
+        inFadeAnimation = true;
+        content.classList.add('fadeOutContent');
 
-    //     setTimeout(() => {
-    //         videoscreen.style.display = "none";
-    //         incomingchat.style.display = "none";
-    //         chatscreen.style.display = "none";
-    //         waitscreen.style.display = "flex";
-    //         setOnWaitScreen(true);
-    //         content.classList.remove('fadeOutContent');
-    //         inFadeAnimation = false;
-    //     }, 3800);
-    // }
+        fadeTimeOut = setTimeout(() => {
+            videoscreen.style.display = "none";
+            incomingchat.style.display = "none";
+            chatscreen.style.display = "none";
+            waitscreen.style.display = "flex";
+            setOnWaitScreen(true);
+            
+        }, 3000);
 
-    // else if(!isPlaying && !inFadeAnimation)
-    // {
+        fadeInTimeOut = setTimeout(() => {
+            content.classList.remove('fadeOutContent');
+            inFadeAnimation = false;
+        }, 6000);
+    }
+
+    else if(!isPlaying && !inFadeAnimation)
+    {
         videoscreen.style.display = "none";
         incomingchat.style.display = "none";
         chatscreen.style.display = "none";
         waitscreen.style.display = "flex";
     
         setOnWaitScreen(true);
-    // }
+    }
    
 }
 
@@ -725,10 +737,10 @@ function displayChat(time = 0)
     scheduleChatMessage(7, 'new', 'right', false, '<div class="dots"></div>');
     scheduleChatMessage(7, 'update', 'right', false, 'Zsuzsi?');
     scheduleChatMessage(10, 'new', 'left', false, '<div class="dots"></div>');
-    scheduleChatMessage(4, 'update', 'left', false, 'Last night was so 🐽 💦 😹 😻 ❤️‍🔥');
-    scheduleChatMessage(4, 'new', 'right', false, '<div class="dots"></div>');
-    scheduleChatMessage(3, 'update', 'right', false, 'Ermmm…');
-    scheduleChatMessage(2, 'new', 'left', false, '<div class="dots"></div>');
+    scheduleChatMessage(6, 'update', 'left', false, 'Last night was so 🐽 💦 😹 😻 ❤️‍🔥');
+    scheduleChatMessage(6, 'new', 'right', false, '<div class="dots"></div>');
+    scheduleChatMessage(5, 'update', 'right', false, 'Ermmm…');
+    scheduleChatMessage(4, 'new', 'left', false, '<div class="dots"></div>');
     scheduleChatMessage(2, 'update','left', false, 'Why so cold?');
     scheduleChatMessage(3, 'new', 'left', true, ' r u w her?');
     scheduleChatMessage(3, 'new', 'right', false, '<div class="dots"></div>');
@@ -740,7 +752,7 @@ function displayChat(time = 0)
     scheduleChatMessage(5, 'new', 'left', false, '<div class="dots"></div>');
     scheduleChatMessage(3, 'update', 'left', false, 'Get rid of her and come here at once 🧜🏻‍♂️ 🧜🏻‍♂️ 🧜🏻‍♂️');
     scheduleChatMessage(5, 'new', 'right', false, '<div class="dots"></div>');
-    scheduleChatMessage(7, 'update', 'right', false, 'According to the scientific research, people using emoticons are emotionally unbalanced');
+    scheduleChatMessage(10, 'update', 'right', false, 'According to the scientific research, people using emoticons are emotionally unbalanced');
     scheduleChatMessage(4, 'new', 'left', false, 'Wtf!!');
     scheduleChatMessage(5, 'new', 'right', false, '<div class="dots"></div>');
     scheduleChatMessage(4, 'update', 'right', false, 'This is Fan, by the way. Karl forgot his phone 😾');
