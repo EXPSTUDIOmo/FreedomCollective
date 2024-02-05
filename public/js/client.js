@@ -124,6 +124,9 @@ const VIDEO_SOURCES_DACH =
     'scaled_Dach_1_video.mp4',
     'scaled_Dach_3_video.mp4',
     'scaled_Dach_4_video.mp4',
+    'scaled_Dach_5_video.mp4',
+    'scaled_Dach_6_video.mp4',
+    'scaled_Baustelle_Pieta_Orbit.mp4'
 ]
 
 
@@ -315,12 +318,12 @@ function showWaitScreen()
             waitscreen.style.display = "flex";
             setOnWaitScreen(true);
             
-        }, 3000);
+        }, 2100);
 
         fadeInTimeOut = setTimeout(() => {
             content.classList.remove('fadeOutContent');
             inFadeAnimation = false;
-        }, 6000);
+        }, 4000);
     }
 
     else if(!isPlaying && !inFadeAnimation)
@@ -369,7 +372,6 @@ let currentVideo = 0;
 
 function preloadVideo(scene)
 {
-
     if(scene === 1 || scene === 0)
     {
         video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
@@ -394,7 +396,7 @@ function playVideo()
         video_1.classList.remove('hidden');
         
         video_2.classList.add('hidden');
-        video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${VIDEO_SOURCES_DACH[currentVideo]}`;
+        video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
 
         currentlyActivePlayer = 1;
     }
@@ -405,12 +407,28 @@ function playVideo()
         video_2.classList.remove('hidden');
         
         video_1.classList.add('hidden');
-        video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${VIDEO_SOURCES_DACH[currentVideo]}`;
+        video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
 
         currentlyActivePlayer = 0;
+    } 
+}
+
+let lastDachVideo = -1;
+
+// Get Random Video without repetition
+function getRandomDachVideo()
+{
+    let index = Math.floor(Math.random() * VIDEO_SOURCES_DACH.length);
+
+    if(index === lastDachVideo)
+    {
+        index = (index + 1) % VIDEO_SOURCES_DACH.length;
     }
 
-    
+    let video = VIDEO_SOURCES_DACH[index];
+    lastDachVideo = index;
+
+    return video;
 }
 
 function stopVideos()
@@ -673,16 +691,36 @@ let lastMessage;
 
 function resetChat()
 {
-    chatMessageIndex = 0;
 
-    for(let timeout of ChatTimeouts)
+    if(inFadeAnimation)
     {
-        clearTimeout(timeout);
-    }
+        setTimeout(() => {
+            chatMessageIndex = 0;
 
-    chatcontent.innerHTML = "";
-    ChatTimeouts = [];
-    waitTime = 0;
+        for(let timeout of ChatTimeouts)
+        {
+            clearTimeout(timeout);
+        }
+
+        chatcontent.innerHTML = "";
+        ChatTimeouts = [];
+        waitTime = 0;
+        }, 2000);
+    }
+    
+    else
+    {
+        chatMessageIndex = 0;
+
+        for(let timeout of ChatTimeouts)
+        {
+            clearTimeout(timeout);
+        }
+    
+        chatcontent.innerHTML = "";
+        ChatTimeouts = [];
+        waitTime = 0;
+    }
 }
 
 function createChatMessage(side, repost, msg)
