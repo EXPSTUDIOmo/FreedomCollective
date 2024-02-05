@@ -602,14 +602,6 @@ video {
   top: 2.5rem;
 }
 
-.top-16 {
-  top: 4rem;
-}
-
-.top-20 {
-  top: 5rem;
-}
-
 .top-28 {
   top: 7rem;
 }
@@ -876,6 +868,12 @@ html {
 
 body {
   margin-top: env(safe-area-inset-top);
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
 }
 
 .fcheight {
