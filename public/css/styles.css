@@ -30,13 +30,19 @@
 
 
 
-body {
-    overflow-x: hidden;
-    overflow-y: auto;
+html { 
+    overflow: hidden;
 }
 
 .fcheight {
-    height: calc(200vh + 1px);
+    height: 100vh;
+}
+
+@supports ((height: 100dvh))
+{
+    .fcheight {
+        height: 100dvh;
+    }
 }
 
 .fcfont {

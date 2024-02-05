@@ -654,10 +654,6 @@ video {
   height: 100%;
 }
 
-.h-screen {
-  height: 100vh;
-}
-
 .w-10 {
   width: 2.5rem;
 }
@@ -858,13 +854,19 @@ video {
   src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype');
 }
 
-body {
-  overflow-x: hidden;
-  overflow-y: auto;
+html {
+  overflow: hidden;
 }
 
 .fcheight {
-  height: calc(200vh + 1px);
+  height: 100vh;
+}
+
+@supports (height: 100dvh)
+{
+  .fcheight {
+    height: 100dvh;
+  }
 }
 
 .fcfont {
