@@ -862,6 +862,10 @@ html {
   overflow: hidden;
 }
 
+body {
+  margin-top: env(safe-area-inset-top);
+}
+
 .fcheight {
   height: 100vh;
 }
