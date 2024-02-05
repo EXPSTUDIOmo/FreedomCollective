@@ -797,9 +797,9 @@ function displayChat(time = 0)
     scheduleChatMessage(7, 'update', 'right', false, 'Can’t wait to see you!');
     scheduleChatMessage(5, 'new', 'left', false, '<div class="dots"></div>');
     scheduleChatMessage(3, 'update', 'left', false, 'Get rid of her and come here at once 🧜🏻‍♂️ 🧜🏻‍♂️ 🧜🏻‍♂️');
-    scheduleChatMessage(5, 'new', 'right', false, '<div class="dots"></div>');
+    scheduleChatMessage(4, 'new', 'right', false, '<div class="dots"></div>');
     scheduleChatMessage(10, 'update', 'right', false, 'According to the scientific research, people using emoticons are emotionally unbalanced');
-    scheduleChatMessage(4, 'new', 'left', false, 'Wtf!!');
+    scheduleChatMessage(5, 'new', 'left', false, 'Wtf!!');
     scheduleChatMessage(5, 'new', 'right', false, '<div class="dots"></div>');
     scheduleChatMessage(4, 'update', 'right', false, 'This is Fan, by the way. Karl forgot his phone 😾');
     scheduleChatMessage(5, 'new', 'left', false, '<div class="dots"></div>');
