@@ -877,13 +877,10 @@ function getRandomInt(min, max) {
 
 
 setTimeout(() => {
-    window.scrollTo(0,1);
+    window.scrollTo(0,200);
 }, 500);
 
 
-setTimeout(() => {
-    window.scrollTo(0,0);
-}, 1000);
 
 
 
