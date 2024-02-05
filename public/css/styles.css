@@ -229,6 +229,23 @@ html {
   }
   @keyframes l2 {to{background-size: 100% 3px}}
 
+
+  .loadertext_video {
+    width: fit-content;
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 8px;
+    color: white;
+    margin-top: 3.5rem;
+    background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
+    animation: l2 2s linear infinite;
+  }
+  .loadertext_video:before {
+    content:"Loading next video"
+  }
+  @keyframes l2 {to{background-size: 100% 3px}}
+
+
 .pulse {
     top: 0;
     opacity: 0;

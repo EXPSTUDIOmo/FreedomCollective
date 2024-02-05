@@ -386,6 +386,22 @@ function preloadVideo(scene)
     currentlyActivePlayer = 0;
 }
 
+video_1.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
+
+video_1.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
+
+video_2.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
+  
+video_2.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
+
 function playVideo()
 {
     currentVideo = (currentVideo + 1) %  numVideosInScene;
