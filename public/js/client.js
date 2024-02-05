@@ -876,6 +876,16 @@ function getRandomInt(min, max) {
 
 
 
+setTimeout(() => {
+    window.scrollTo(0,1);
+}, 500);
+
+
+setTimeout(() => {
+    window.scrollTo(0,0);
+}, 1000);
+
+
 
 
 
