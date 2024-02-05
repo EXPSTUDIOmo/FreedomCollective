@@ -29,10 +29,17 @@
 }
 
 html {
-    overflow-x: hidden;
-    overflow-y: auto
+    overflow: hidden;
 }
 
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.fcheight {
+    height: calc(100dvh + 1px);
+}
 
 .fcfont {
     font-family: 'Luckiest';

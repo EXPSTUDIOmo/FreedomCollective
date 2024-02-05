@@ -859,8 +859,16 @@ video {
 }
 
 html {
+  overflow: hidden;
+}
+
+body {
   overflow-x: hidden;
-  overflow-y: auto
+  overflow-y: auto;
+}
+
+.fcheight {
+  height: calc(100dvh + 1px);
 }
 
 .fcfont {
