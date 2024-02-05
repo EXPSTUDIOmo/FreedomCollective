@@ -28,9 +28,7 @@
     src: url('fonts/LuckiestGuy-Regular.ttf') format('truetype');
 }
 
-html {
-    overflow: hidden;
-}
+
 
 body {
     overflow-x: hidden;
