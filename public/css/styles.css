@@ -329,14 +329,14 @@ html {
 }
 
 .chat-title {
-    background: #750275;
+    background: linear-gradient(180deg, #4f0e4f 0%, #8800a4 100%);
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.12);
     color: #D308D3; 
     filter: blur(0.5px); 
     font-size: 2rem;
     height: 3.5rem;
     padding-left: 1rem;
-    padding-top: env(3rem);
+    padding-top: 3rem;
     padding-bottom: 1rem;
     text-align: center;
 }
