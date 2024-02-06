@@ -469,6 +469,7 @@ function loadSounds(voiceid)
 
     SOUNDS[0] = new Howl({
         src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
+        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -477,6 +478,7 @@ function loadSounds(voiceid)
 
     SOUNDS[1] = new Howl({
         src: [`Samples/NOT/NOT_H_${voiceid+1}.mp3`],
+        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -484,6 +486,7 @@ function loadSounds(voiceid)
 
     SOUNDS[2] = new Howl({
         src: [`Samples/FLT/FLT_H_${voiceid+1}.mp3`],
+        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -491,7 +494,7 @@ function loadSounds(voiceid)
 
     SOUNDS[3] = new Howl({
         src: [`Samples/freedom-collective.mp3`],
-        false: true,
+        html5: true,
         onload: function() {
             incrementSFLoaded();
            }
@@ -584,9 +587,6 @@ connectBtn.onclick = () =>
 
     unmuteWebAudio();
    
-
-
-
     goFullscreen();
     socket.emit("activate");
     // document.getElementById('connect_btn').style.color = "green";
