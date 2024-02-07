@@ -25,11 +25,6 @@ const httpServer = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(httpServer);
 
-app.use((req, res, next) => {
-  res.setHeader('Accept-Ranges', 'bytes');
-  next();
-});
-
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -186,6 +181,7 @@ function addClient(socket)
   });
 
   socket.on('activate', () => {
+
     let timeToJump = isPlaying ? (Date.now() - lastStartTime) / 1000 : 0; 
     socket.emit("activation", { playing: isPlaying, scene: currentScene, time: timeToJump});
     })
@@ -206,7 +202,7 @@ function wakeClients()
 }
 
 
-setInterval(wakeClients, 5000);
+setInterval(wakeClients, 10000);
 
 
 

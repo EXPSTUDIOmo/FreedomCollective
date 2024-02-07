@@ -3,14 +3,15 @@
     Maurice Oeser
 
     FREEDOM COLLECTIVE - Davor Vincze
+    Soundfile Controler MSync
+    
+    Client
 */
 
 let currentScene = 0;
 let isPlaying = false;
-
 const connectionStatus = document.getElementById('connectionStatus');
 const videoHint = document.getElementById('video_tab_hint');
-const videoScreen = document.getElementById('videoscreen');
 
 const avatarSecretary = document.getElementById('waitavatar_secretary');
 const avatarSzusi = document.getElementById('waitavatar_szusi');
@@ -64,6 +65,15 @@ function showNextAvatar()
 }
 
 
+
+/*
+Debug Flag, wenn activ wird die DBG() Funktion ausgeführt, so kann man schnell global 
+alle console.logs() aktivieren bzw. deaktivieren
+*/
+const bDBG = true;
+
+//const debugHeader = document.getElementById('debug'); // nur zum debuggen, TODO: Löschen
+const progress = document.getElementById('progress');
 const connectBtn = document.getElementById('connect_btn_container');
 const incomingchat = document.getElementById('incomingchat');
 const content = document.getElementById('content');
@@ -73,6 +83,9 @@ const videoscreen = document.getElementById('videoscreen');
 const waitscreen = document.getElementById('waitscreen');
 const pulses = document.getElementsByClassName('pulse');
 const pulses_play = document.getElementsByClassName('pulse_play');
+
+const video_1 = document.getElementById('video_1');
+const video_2 = document.getElementById('video_2');
 
 const VIDEO_SOURCES_POSES = 
 [
@@ -84,6 +97,28 @@ const VIDEO_SOURCES_POSES =
 ];
 
 
+// const VIDEO_SOURCES_POSES = 
+// [
+//     'scaled_Alle_Dach_video.mp4',
+//     'scaled_Andrei_1_video.mp4',
+//     'scaled_Andrei_2_video.mp4',
+//     'scaled_Andrei_Foyer_Nebel_video.mp4',
+//     'scaled_Andrei_Zwischendach_1_video.mp4',
+//     'scaled_Andrei_Zwischendach_2_video.mp4',
+//     'scaled_Fan_1_video.mp4',
+//     'scaled_Fan_2_video.mp4',
+//     'scaled_Karl_1_video.mp4',
+//     'scaled_Karl_2_video.mp4',
+//     'scaled_Opponent_Markus_1_video.mp4',
+//     'scaled_Opponent_Martin_1_video.mp4',
+//     'scaled_Opponent_Martin_2_video.mp4',
+//     'scaled_Secretary_1_video.mp4',
+//     'scaled_Secretary_2_video.mp4',
+//     'scaled_Secretary_3_video.mp4',
+//     'scaled_Zsuzsi_1_video.mp4',
+//     'scaled_Zsuzsi_4_video.mp4'
+// ];
+
 const VIDEO_SOURCES_DACH = 
 [
     'scaled_Dach_1_video.mp4',
@@ -94,8 +129,7 @@ const VIDEO_SOURCES_DACH =
     'scaled_Baustelle_Pieta_Orbit.mp4'
 ]
 
-let VIDEOS_SCENE_1 = [];
-let VIDEOS_SCENE_3 = [];
+
 
 let numVideosInScene = VIDEO_SOURCES_POSES.length;
 
@@ -158,20 +192,27 @@ function ping()
 }
 
 let dummyCounter = 0;
-
 socket.on('pong', () => {
+    SOUNDS[3].play();
     dummyCounter += 1;
 })
 
-
+function pingFailed()
+{
+    // TODO what to do if ping failed
+    DBG("PING FAILED! CONNECTION DISTURBED!");
+    
+}
 
 socket.on('activation', (state) => {
 
     if(currentScene == state.scene || !isConnected)
         return;
 
+
     preloadVideo(state.scene);
     loadScene(state.scene, state.time);
+    
 });
 
 socket.on('disconnect', (data) => {
@@ -187,8 +228,6 @@ socket.on('stop', () => {
 
     if(currentScene != 0)
         loadScene(0);
-
-    stopAllSound();
 });
 
 socket.on('silent', () => {
@@ -197,17 +236,16 @@ socket.on('silent', () => {
 
 function loadScene(scene, time = 0)
 {
-    if(currentScene == scene || !isConnected)
+    if(currentScene == scene)
         return;
 
     currentScene = scene;
     stopAllSound();
-    stopVideos();
 
     if(inFadeAnimation)
     {
         content.classList.remove('fadeOutContent');
-        clearTimeout(fadeOutTimeOut);
+        clearTimeout(fadeTimeOut);
         clearTimeout(fadeInTimeOut);
         inFadeAnimation = false;
     }
@@ -217,14 +255,13 @@ function loadScene(scene, time = 0)
         case 0:
             showWaitScreen();
             stopAllSound();
+            numVideosInScene = VIDEO_SOURCES_POSES.length;
             stopVideos();
             resetChat();
             IsInChat = false;
             isPlaying = false;
             break;
         case 1:
-            preloadVideo(1);
-            numVideosInScene = VIDEO_SOURCES_POSES.length;
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
@@ -264,7 +301,7 @@ function loadScene(scene, time = 0)
 }
 
 let inFadeAnimation = false;
-let fadeOutTimeOut;
+let fadeTimeOut;
 let fadeInTimeOut;
 
 function showWaitScreen()
@@ -274,19 +311,19 @@ function showWaitScreen()
         inFadeAnimation = true;
         content.classList.add('fadeOutContent');
 
-        fadeOutTimeOut = setTimeout(() => {
+        fadeTimeOut = setTimeout(() => {
             videoscreen.style.display = "none";
             incomingchat.style.display = "none";
             chatscreen.style.display = "none";
             waitscreen.style.display = "flex";
             setOnWaitScreen(true);
             
-        }, 2200);
+        }, 2100);
 
         fadeInTimeOut = setTimeout(() => {
             content.classList.remove('fadeOutContent');
             inFadeAnimation = false;
-        }, 4500);
+        }, 4000);
     }
 
     else if(!isPlaying && !inFadeAnimation)
@@ -326,8 +363,8 @@ let SOUNDS = [];
 
 function playSound(sound, time = 0)
 {
-    SOUNDS[sound].seek(time);
     SOUNDS[sound].play();
+    SOUNDS[sound].seek(time);
 }
 
 let currentlyActivePlayer = 1;
@@ -335,54 +372,62 @@ let currentVideo = 0;
 
 function preloadVideo(scene)
 {
-    // if(scene === 1 || scene === 0)
-    // {
-    //     video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
-    // }
+    if(scene === 1 || scene === 0)
+    {
+        video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
+    }
 
-    // else
-    // {
-    //     video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
-    // }
+    else
+    {
+        video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
+    }
 
     currentVideo = 0;
-    // currentlyActivePlayer = 0;
+    currentlyActivePlayer = 0;
 }
 
+video_1.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
 
+video_1.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
 
-
-let currentPlayingVideo = -1;
+video_2.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
+  
+video_2.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
 
 function playVideo()
 {
-    let videosToUse = currentScene === 1 ? VIDEOS_SCENE_1 : VIDEOS_SCENE_3;
+    currentVideo = (currentVideo + 1) %  numVideosInScene;
 
-    if(currentPlayingVideo != -1)
+    if(currentlyActivePlayer === 0)
     {
-        videosToUse[currentPlayingVideo].pause();
-        videosToUse[currentPlayingVideo].classList.add('hidden');
+        video_1.play();
+        video_1.classList.remove('hidden');
+        
+        video_2.classList.add('hidden');
+        video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+
+        currentlyActivePlayer = 1;
     }
 
-    if(currentScene === 1)
-    {
-        currentPlayingVideo = (currentPlayingVideo + 1) %  numVideosInScene;
-    }
-    
     else
     {
-        currentPlayingVideo = getRandomDachVideo();
-    }
+        video_2.play();
+        video_2.classList.remove('hidden');
+        
+        video_1.classList.add('hidden');
+        video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
 
-
-    if(videosToUse[currentPlayingVideo])
-    {
-        videosToUse[currentPlayingVideo].play();
-        videosToUse[currentPlayingVideo].classList.remove('hidden');
-    }
-    
+        currentlyActivePlayer = 0;
+    } 
 }
-
 
 let lastDachVideo = -1;
 
@@ -396,25 +441,16 @@ function getRandomDachVideo()
         index = (index + 1) % VIDEO_SOURCES_DACH.length;
     }
 
+    let video = VIDEO_SOURCES_DACH[index];
     lastDachVideo = index;
-    return index;
+
+    return video;
 }
 
 function stopVideos()
 {
-   for(let video of VIDEOS_SCENE_1)
-   {
-       video.pause();
-       video.classList.add('hidden');
-   }
-
-   for(let video of VIDEOS_SCENE_3)
-    {
-         video.pause();
-         video.classList.add('hidden');
-    }
-
-    currentPlayingVideo = -1;
+    video_1.pause();
+    video_2.pause();
 }
 
 
@@ -431,92 +467,67 @@ let loadTimeout;
 function loadSounds(voiceid)
 {
 
-    loadSound(0, `Samples/PNO/PNO_H_${voiceid+1}.mp3`);
-    loadSound(1, `Samples/NOT/NOT_H_${voiceid+1}.mp3`);
-    loadSound(2, `Samples/FLT/FLT_H_${voiceid+1}.mp3`);
-}
-
-
-
-function loadSound(index, url, retries = 0, maxRetries = 3) {
-    SOUNDS[index] = new Howl({
-        src: [url],
+    SOUNDS[0] = new Howl({
+        src: [`Samples/PNO/PNO_H_${voiceid+1}.mp3`],
         html5: true,
         onload: function() {
             incrementSFLoaded();
-        },
-        onloaderror: function(soundId, error) {
-            
-            if (retries < maxRetries) {
-                loadSound(index, url, retries + 1, maxRetries); 
-            } else {
-               
-                window.location.reload();
-            }
-        }
-    });
+           }
+      }); 
+
+
+    SOUNDS[1] = new Howl({
+        src: [`Samples/NOT/NOT_H_${voiceid+1}.mp3`],
+        html5: true,
+        onload: function() {
+            incrementSFLoaded();
+           }
+    }); 
+
+    SOUNDS[2] = new Howl({
+        src: [`Samples/FLT/FLT_H_${voiceid+1}.mp3`],
+        html5: true,
+        onload: function() {
+            incrementSFLoaded();
+           }
+    }); 
+
+    SOUNDS[3] = new Howl({
+        src: [`Samples/freedom-collective.mp3`],
+        html5: true,
+        onload: function() {
+            incrementSFLoaded();
+           }
+    }); 
 }
 
 
 
-
-
-
-function loadVideos()
+function unmuteWebAudio()
 {
-    for(let source of VIDEO_SOURCES_POSES)
+    // Create an audio context instance if WebAudio is supported
+    let context = (window.AudioContext || window.webkitAudioContext) ?
+    new (window.AudioContext || window.webkitAudioContext)() : null;
+
+    // Decide on some parameters
+    let allowBackgroundPlayback = false; // default false, recommended false
+    let forceIOSBehavior = false; // default false, recommended false
+    // Pass it to unmute if the context exists... ie WebAudio is supported
+    if (context)
     {
-        let newVideo = loadVideo(`/Videos/${source}`);
-        VIDEOS_SCENE_1.push(newVideo);
-        videoScreen.appendChild(newVideo);
-        newVideo.onwaiting = showLoadingIndicator;
-        newVideo.onplaying = hideLoadingIndicator;
-    }
+        // If you need to be able to disable unmute at a later time, you can use the returned handle's dispose() method
+        // if you don't need to do that (most folks won't) then you can simply ignore the return value
+        let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
 
-    for(let source of VIDEO_SOURCES_DACH)
-    {
-        let newVideo = loadVideo(`/Videos/${source}`);
-        VIDEOS_SCENE_3.push(newVideo);
-        videoScreen.appendChild(newVideo);
-        newVideo.onwaiting = showLoadingIndicator;
-        newVideo.onplaying = hideLoadingIndicator;
+        // ... at some later point you wish to STOP unmute control
+        unmuteHandle.dispose();
+        unmuteHandle = null;
     }
 }
 
-function showLoadingIndicator() {
-    document.getElementById('video_loading').style.display = 'block';
-}
-
-// Function to hide loading indicator
-function hideLoadingIndicator() {
-    document.getElementById('video_loading').style.display = 'none';
-}
 
 
-
-function loadVideo(src)
-{
-        // Create the video element
-    let video = document.createElement('video');
-
-    // Set attributes
-    video.setAttribute('src', src);
-    video.setAttribute('playsinline', '');
-    video.setAttribute('preload', 'auto');
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-
-    // Add classes
-    video.classList.add('hidden', 'video');
-
-    // Append the video element to the DOM
-    // For example, appending to the body, but you can append it to any other element
-    return video;
-}
-
-
-const SoundfilesToLoad = 3;
+const SoundfilesToLoad = 4;
 let soundfilesLoaded = 0;
 
 function incrementSFLoaded()
@@ -527,11 +538,36 @@ function incrementSFLoaded()
     {
         document.getElementById('loading_container').style.display = "none";
         connectBtn.style.display = "block";
-
-        loadVideos();
     }
 }
 
+
+
+// function loadSound(url, retryCount = 0) {
+//     const maxRetries = 5; // Set a max number of retries to avoid infinite loops
+//     const audio = new Audio(url);
+   
+//     audio.addEventListener('error', () => {
+//         console.error(`Error loading sound file: ${url}`);
+
+//         if (retryCount < maxRetries) {
+//             console.log(`Attempting to reload sound file. Retry ${retryCount + 1}`);
+//             loadSound(url, retryCount + 1); // Retry loading the sound
+//         } else {
+//             location.reload();
+//             console.error("ERROR LOADING SOUNDFILES");
+//             // Handle the failure, perhaps by notifying the user or disabling sound-related functionality
+//         }
+//     });
+
+//     audio.addEventListener('canplaythrough', () => {
+//         // The entire audio is likely to play without interruption
+//         incrementSFLoaded();
+//     });
+
+//     audio.load();
+//     return audio;
+// }
 
 
 
@@ -549,7 +585,8 @@ connectBtn.onclick = () =>
     if(isConnected)
         return;
 
-    isConnected = true;
+    unmuteWebAudio();
+   
     goFullscreen();
     socket.emit("activate");
     // document.getElementById('connect_btn').style.color = "green";
@@ -561,7 +598,7 @@ connectBtn.onclick = () =>
         document.getElementById('connect_btn').classList.add('grow');
     }, 750);
 
-    
+    isConnected = true;
 
     setTimeout(() => {
         document.getElementById('startscreen').style.display = "none";
@@ -595,7 +632,15 @@ function goFullscreen()
         } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
             document.documentElement.msRequestFullscreen();
         }
+        else
+        {
+            console.log("NO FULLSCREEN SUPPORT");
+        }
     }
+
+
+    // var requestFullScreen = document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen;
+    // requestFullScreen.call(document.documentElement);
 }
 
 function detectMobile() {
@@ -625,6 +670,12 @@ function enableNoSleep()
 
 let IsInChat = false;
 
+
+// DEBUG
+// document.getElementById('waitscreen').style.display = "none";
+// document.getElementById('startscreen').style.display = "none";
+// document.getElementById('content').style.display = "flex";
+// document.getElementById('chatscreen').style.display = "none";
 
 
 function showIncomingChat()
@@ -819,7 +870,15 @@ function scheduleChatMessage(time, type, side, report, msg)
     UTILITY FUNCTIONS
 */
 
-
+function DBG(msg)
+{
+    if(bDBG)
+    {
+        console.log(msg);
+        //debugHeader.textContent = msg;
+    }
+     
+}
 
 
 function getRandomInt(min, max) {
