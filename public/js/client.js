@@ -377,6 +377,7 @@ function playVideo()
         
         video_2.classList.add('hidden');
         video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+        video_2.load();
 
         currentlyActivePlayer = 1;
     }
@@ -388,7 +389,7 @@ function playVideo()
         
         video_1.classList.add('hidden');
         video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-
+        video_1.load();
         currentlyActivePlayer = 0;
     } 
 }
