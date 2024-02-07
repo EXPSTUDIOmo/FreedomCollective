@@ -526,6 +526,7 @@ function loadVideo(src)
     // Set attributes
     video.setAttribute('src', src);
     video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'auto');
     video.load();
     video.loop = true;
     video.muted = true;
