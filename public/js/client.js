@@ -202,7 +202,6 @@ function loadScene(scene, time = 0)
 
     currentScene = scene;
     stopAllSound();
-    stopVideos();
 
     if(inFadeAnimation)
     {
@@ -405,13 +404,37 @@ function stopVideos()
    for(let video of VIDEOS_SCENE_1)
    {
        video.pause();
-       video.classList.add('hidden');
+
+       if(inFadeAnimation)
+       {
+        setTimeout(() => {
+            video.classList.add('hidden');
+        }, 2000);
+        
+       }
+
+       else
+       {
+        video.classList.add('hidden');
+       }
    }
 
    for(let video of VIDEOS_SCENE_3)
     {
          video.pause();
-         video.classList.add('hidden');
+
+         if(inFadeAnimation)
+         {
+          setTimeout(() => {
+              video.classList.add('hidden');
+          }
+          , 2000);
+         }
+  
+         else
+         {
+          video.classList.add('hidden');
+         }
     }
 
     currentPlayingVideo = -1;
