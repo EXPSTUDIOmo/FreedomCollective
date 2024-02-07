@@ -74,6 +74,9 @@ const waitscreen = document.getElementById('waitscreen');
 const pulses = document.getElementsByClassName('pulse');
 const pulses_play = document.getElementsByClassName('pulse_play');
 
+const video_1 = document.getElementById('video_1');
+const video_2 = document.getElementById('video_2');
+
 const VIDEO_SOURCES_POSES = 
 [
     'scaled_Zsuzsi_1_video.mp4',
@@ -152,10 +155,6 @@ socket.on('connected', (state) => {
 
 let pingTimeout;
 
-function ping()
-{
-   
-}
 
 let dummyCounter = 0;
 
@@ -334,58 +333,67 @@ let currentVideo = 0;
 
 function preloadVideo(scene)
 {
-    // if(scene === 1 || scene === 0)
-    // {
-    //     video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
-    // }
+    if(scene === 1 || scene === 0)
+    {
+        video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
+    }
 
-    // else
-    // {
-    //     video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
-    // }
+    else
+    {
+        video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
+    }
 
     currentVideo = 0;
-    // currentlyActivePlayer = 0;
+    currentlyActivePlayer = 0;
 }
 
 
 
 
-let currentPlayingVideo = -1;
+video_1.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
+
+video_1.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
+
+video_2.onwaiting = function() {
+    document.getElementById('video_loading').style.display = 'block';
+  };
+  
+video_2.onplaying = function() {
+    document.getElementById('video_loading').style.display = 'none';
+  };
 
 function playVideo()
 {
-    let videosToUse = currentScene === 1 ? VIDEOS_SCENE_1 : VIDEOS_SCENE_3;
+    currentVideo = (currentVideo + 1) %  numVideosInScene;
 
-    if(currentPlayingVideo != -1)
+    if(currentlyActivePlayer === 0)
     {
-        videosToUse[currentPlayingVideo].pause();
-        videosToUse[currentPlayingVideo].classList.add('hidden');
+        video_1.play();
+        video_1.classList.remove('hidden');
+        
+        video_2.classList.add('hidden');
+        video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+
+        currentlyActivePlayer = 1;
     }
 
-    if(currentScene === 1)
-    {
-        currentPlayingVideo = (currentPlayingVideo + 1) %  numVideosInScene;
-    }
-    
     else
     {
-        currentPlayingVideo = getRandomDachVideo();
-    }
+        video_2.play();
+        video_2.classList.remove('hidden');
+        
+        video_1.classList.add('hidden');
+        video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
 
-
-    if(videosToUse[currentPlayingVideo])
-    {
-        videosToUse[currentPlayingVideo].play();
-        videosToUse[currentPlayingVideo].classList.remove('hidden');
-    }
-    
+        currentlyActivePlayer = 0;
+    } 
 }
 
-
 let lastDachVideo = -1;
-
-// Get Random Video without repetition
 function getRandomDachVideo()
 {
     let index = Math.floor(Math.random() * VIDEO_SOURCES_DACH.length);
@@ -395,49 +403,15 @@ function getRandomDachVideo()
         index = (index + 1) % VIDEO_SOURCES_DACH.length;
     }
 
+    let video = VIDEO_SOURCES_DACH[index];
     lastDachVideo = index;
-    return index;
-}
 
+    return video;
+}
 function stopVideos()
 {
-   for(let video of VIDEOS_SCENE_1)
-   {
-       video.pause();
-
-       if(inFadeAnimation)
-       {
-        setTimeout(() => {
-            video.classList.add('hidden');
-        }, 2000);
-        
-       }
-
-       else
-       {
-        video.classList.add('hidden');
-       }
-   }
-
-   for(let video of VIDEOS_SCENE_3)
-    {
-         video.pause();
-
-         if(inFadeAnimation)
-         {
-          setTimeout(() => {
-              video.classList.add('hidden');
-          }
-          , 2000);
-         }
-  
-         else
-         {
-          video.classList.add('hidden');
-         }
-    }
-
-    currentPlayingVideo = -1;
+    video_1.pause();
+    video_2.pause();
 }
 
 
@@ -484,63 +458,6 @@ function loadSound(index, url, retries = 0, maxRetries = 3) {
 
 
 
-
-function loadVideos()
-{
-    for(let source of VIDEO_SOURCES_POSES)
-    {
-        let newVideo = loadVideo(`/Videos/${source}`);
-        VIDEOS_SCENE_1.push(newVideo);
-        videoScreen.appendChild(newVideo);
-        newVideo.onwaiting = showLoadingIndicator;
-        newVideo.onplaying = hideLoadingIndicator;
-    }
-
-    for(let source of VIDEO_SOURCES_DACH)
-    {
-        let newVideo = loadVideo(`/Videos/${source}`);
-        VIDEOS_SCENE_3.push(newVideo);
-        videoScreen.appendChild(newVideo);
-        newVideo.onwaiting = showLoadingIndicator;
-        newVideo.onplaying = hideLoadingIndicator;
-    }
-}
-
-function showLoadingIndicator() {
-    document.getElementById('video_loading').style.display = 'block';
-}
-
-// Function to hide loading indicator
-function hideLoadingIndicator() {
-    document.getElementById('video_loading').style.display = 'none';
-}
-
-
-
-function loadVideo(src)
-{
-        // Create the video element
-    let video = document.createElement('video');
-    video.classList.add('hidden', 'video');
-    
-    // Set attributes
-    video.setAttribute('src', src);
-    video.setAttribute('playsinline', '');
-    video.setAttribute('preload', 'auto');
-    video.load();
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-
-    // Add classes
-   
-
-    // Append the video element to the DOM
-    // For example, appending to the body, but you can append it to any other element
-    return video;
-}
-
-
 const SoundfilesToLoad = 3;
 let soundfilesLoaded = 0;
 
@@ -552,8 +469,6 @@ function incrementSFLoaded()
     {
         document.getElementById('loading_container').style.display = "none";
         connectBtn.style.display = "block";
-
-        loadVideos();
     }
 }
 
