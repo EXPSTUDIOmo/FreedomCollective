@@ -521,7 +521,8 @@ function loadVideo(src)
 {
         // Create the video element
     let video = document.createElement('video');
-
+    video.classList.add('hidden', 'video');
+    
     // Set attributes
     video.setAttribute('src', src);
     video.setAttribute('playsinline', '');
@@ -531,7 +532,7 @@ function loadVideo(src)
     video.playsInline = true;
 
     // Add classes
-    video.classList.add('hidden', 'video');
+   
 
     // Append the video element to the DOM
     // For example, appending to the body, but you can append it to any other element
