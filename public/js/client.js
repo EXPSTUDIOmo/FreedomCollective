@@ -373,11 +373,16 @@ function playVideo()
     if(currentlyActivePlayer === 0)
     {
         video_1.play();
-        video_1.classList.remove('hidden');
-        
-        video_2.classList.add('hidden');
-        video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-        video_2.load();
+
+        setTimeout(() => {
+            video_1.classList.remove('hidden');
+            video_2.classList.add('hidden');
+            video_2.pause();
+            video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+            video_2.load();
+        }, 200);
+
+       
 
         currentlyActivePlayer = 1;
     }
@@ -385,11 +390,16 @@ function playVideo()
     else
     {
         video_2.play();
-        video_2.classList.remove('hidden');
         
-        video_1.classList.add('hidden');
-        video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-        video_1.load();
+        setTimeout(() => {
+            video_2.classList.remove('hidden');
+            video_1.classList.add('hidden');
+            video_1.pause();
+            video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+            video_1.load();
+        }, 200);
+
+       
         currentlyActivePlayer = 0;
     } 
 }
