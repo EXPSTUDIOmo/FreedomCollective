@@ -365,43 +365,29 @@ video_2.onwaiting = function() {
 video_2.onplaying = function() {
     document.getElementById('video_loading').style.display = 'none';
   };
+  function playVideo() {
+    currentVideo = (currentVideo + 1) % numVideosInScene;
+    let nextVideo = currentlyActivePlayer === 0 ? video_2 : video_1;
+    let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
 
-function playVideo()
-{
-    currentVideo = (currentVideo + 1) %  numVideosInScene;
+    // Preload next video
+    nextVideo.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
+    nextVideo.load();
 
-    if(currentlyActivePlayer === 0)
-    {
-        video_1.play();
+    nextVideo.oncanplaythrough = () => {
+        // Play next video
+        nextVideo.play();
 
-        setTimeout(() => {
-            video_1.classList.remove('hidden');
-            video_2.classList.add('hidden');
-            video_2.pause();
-            video_2.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-            video_2.load();
-        }, 200);
+        // Immediately switch visibility without delay
+        nextVideo.classList.remove('hidden');
+        currentVideoElement.classList.add('hidden');
 
-       
+        // Pause and hide the previous video after next video starts playing
+        currentVideoElement.pause();
 
-        currentlyActivePlayer = 1;
-    }
-
-    else
-    {
-        video_2.play();
-        
-        setTimeout(() => {
-            video_2.classList.remove('hidden');
-            video_1.classList.add('hidden');
-            video_1.pause();
-            video_1.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-            video_1.load();
-        }, 200);
-
-       
-        currentlyActivePlayer = 0;
-    } 
+        // Switch the active player
+        currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
+    };
 }
 
 let lastDachVideo = -1;
