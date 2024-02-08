@@ -274,6 +274,8 @@ function showWaitScreen()
 
         fadeOutTimeOut = setTimeout(() => {
             videoscreen.style.display = "none";
+            video_1.classList.add('hidden');
+            video_2.classList.add('hidden');
             incomingchat.style.display = "none";
             chatscreen.style.display = "none";
             waitscreen.style.display = "flex";
@@ -290,6 +292,8 @@ function showWaitScreen()
     else if(!isPlaying && !inFadeAnimation)
     {
         videoscreen.style.display = "none";
+        video_1.classList.add('hidden');
+        video_2.classList.add('hidden');
         incomingchat.style.display = "none";
         chatscreen.style.display = "none";
         waitscreen.style.display = "flex";
