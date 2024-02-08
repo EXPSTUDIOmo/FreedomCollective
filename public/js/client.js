@@ -684,7 +684,7 @@ function createChatMessage(side, repost, msg)
     }
 
     let chatbubble = document.createElement('div');
-    chatbubble.classList.add('bg-white'); 
+    chatbubble.classList.add('white-background'); 
 
    
     let text = document.createElement('p');
