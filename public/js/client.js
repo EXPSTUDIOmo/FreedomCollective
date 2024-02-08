@@ -379,7 +379,12 @@ function playVideo() {
 
     // Play the current video
     currentVideoElement.play().then(() => {
-        currentVideoElement.classList.remove('hidden');
+
+        requestAnimationFrame(() => {
+
+            currentVideoElement.classList.remove('hidden');
+            nextVideoElement.classList.add('hidden');
+        });
 
         // Update the index for the next video to be preloaded
         let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
@@ -391,7 +396,7 @@ function playVideo() {
 
         // Pause and hide the next video element until it's its turn to play
         nextVideoElement.pause();
-        nextVideoElement.classList.add('hidden');
+        
 
         currentVideo = nextVideoIndex;
         currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
