@@ -343,7 +343,7 @@ function preloadVideo(scene)
         video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
     }
 
-    currentVideo = 0;
+    currentVideo = -1;
     currentlyActivePlayer = 0;
 }
 
@@ -365,7 +365,9 @@ video_2.onwaiting = function() {
 video_2.onplaying = function() {
     document.getElementById('video_loading').style.display = 'none';
   };
-  function playVideo() {
+
+
+function playVideo() {
     currentVideo = (currentVideo + 1) % numVideosInScene;
     let nextVideo = currentlyActivePlayer === 0 ? video_2 : video_1;
     let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
