@@ -211,6 +211,7 @@ function loadScene(scene, time = 0)
         content.classList.remove('fadeOutContent');
         clearTimeout(fadeOutTimeOut);
         clearTimeout(fadeInTimeOut);
+        clearTimeout(chatFadeTimeout);
         inFadeAnimation = false;
     }
 
@@ -631,14 +632,14 @@ let ChatTimeouts = [];
 let chatMessageIndex = 0;
 let waitTime = 0;
 let lastMessage;
-
+let chatFadeTimeout;
 
 function resetChat()
 {
 
     if(inFadeAnimation)
     {
-        setTimeout(() => {
+        chatFadeTimeout = setTimeout(() => {
             chatMessageIndex = 0;
 
         for(let timeout of ChatTimeouts)
