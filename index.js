@@ -30,6 +30,16 @@ app.use((req, res, next) => {
   next();
 });
 
+
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.mp4')) {
+          // Set Cache-Control header for MP4 videos
+          res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+      }
+  }
+}));
+
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
