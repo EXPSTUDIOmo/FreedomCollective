@@ -329,7 +329,7 @@ function playSound(sound, time = 0)
 }
 
 let currentlyActivePlayer = 1;
-let currentVideo = 0;
+let currentVideo = -1;
 
 function preloadVideo(scene)
 {
@@ -368,6 +368,15 @@ video_2.onplaying = function() {
 
 
 function playVideo() {
+
+    if(currentVideo === -1)
+    {
+        video_1.play();
+        video_1.classList.remove('hidden');
+        currentVideo = (currentVideo + 1) % numVideosInScene;
+        return;
+    }
+
     currentVideo = (currentVideo + 1) % numVideosInScene;
     let nextVideo = currentlyActivePlayer === 0 ? video_2 : video_1;
     let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
@@ -378,20 +387,19 @@ function playVideo() {
 
     nextVideo.oncanplaythrough = () => {
         // Play next video
-        nextVideo.play();
+        nextVideo.play().then(() => {
+            requestAnimationFrame(() => {
+                nextVideo.classList.remove('hidden');
+                currentVideoElement.classList.add('hidden');
+                currentVideoElement.pause();
+                currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
+            });
+        }).catch(error => { playVideo()});
 
-        // Immediately switch visibility without delay
-
-        requestAnimationFrame(() => {
-            nextVideo.classList.remove('hidden');
-            currentVideoElement.classList.add('hidden');
-        });
-       
         // Pause and hide the previous video after next video starts playing
-        currentVideoElement.pause();
-
+       
         // Switch the active player
-        currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
+       
     };
 }
 
