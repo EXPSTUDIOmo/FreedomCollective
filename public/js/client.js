@@ -5,6 +5,8 @@
     FREEDOM COLLECTIVE - Davor Vincze
 */
 
+
+
 let currentScene = 0;
 let isPlaying = false;
 
@@ -51,6 +53,7 @@ function setOnWaitScreen(state)
 
 function showNextAvatar()
 {
+
     WAIT_AVATARS[avatarIndex].classList.add('screen-avatar-active');
 
     if(lastAvatarIndex != -1)
@@ -106,6 +109,7 @@ videoscreen.addEventListener('click', () => {
     playVideo();
     videoHint.style.display = "none";
 })
+
 
 
 
@@ -376,33 +380,32 @@ function playVideo() {
     // Determine the video elements based on the currently active player
     let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
     let nextVideoElement = currentlyActivePlayer === 0 ? video_2 : video_1;
-
+    
     // Play the current video
     currentVideoElement.play().then(() => {
         
-        currentVideoElement.addEventListener('playing', function onPlaying() {
-            // Once playing, hide the next video element and pause it
+      
+    // Once playing, hide the next video element and pause it
 
-            requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
 
-            currentVideoElement.classList.remove('hidden');
-            nextVideoElement.classList.add('hidden');
-            nextVideoElement.pause();
-            });
-         
-            // Cleanup: remove the event listener to prevent memory leaks or unintended behavior
-            currentVideoElement.removeEventListener('playing', onPlaying);
+        currentVideoElement.classList.remove('hidden');
+        nextVideoElement.classList.add('hidden');
+        nextVideoElement.pause();
+    });
+    
+    // Cleanup: remove the event listener to prevent memory leaks or unintended behavior
 
-            // Preload the next video in the background after ensuring the current one is playing
-            let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-            let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
-            nextVideoElement.src = nextVideoSrc;
-            nextVideoElement.load(); // Start loading the next video
+    // Preload the next video in the background after ensuring the current one is playing
+    let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
+    let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
+    nextVideoElement.src = nextVideoSrc;
+    nextVideoElement.load(); // Start loading the next video
 
-            // Update variables for the next cycle
-            currentVideo = nextVideoIndex;
-            currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
-        });
+    // Update variables for the next cycle
+    currentVideo = nextVideoIndex;
+    currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
+
 
         // requestAnimationFrame(() => {
 
