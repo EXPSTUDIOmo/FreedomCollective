@@ -333,7 +333,7 @@ function playSound(sound, time = 0)
 }
 
 let currentlyActivePlayer = 1;
-let currentVideo = -1;
+let currentVideo = 0;
 
 function preloadVideo(scene)
 {
@@ -347,7 +347,7 @@ function preloadVideo(scene)
         video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
     }
 
-    currentVideo = -1;
+    currentVideo = 0;
     currentlyActivePlayer = 0;
 }
 
@@ -373,38 +373,34 @@ video_2.onplaying = function() {
 
 function playVideo() {
 
-    if(currentVideo === -1)
-    {
-        video_1.play();
-        video_1.classList.remove('hidden');
-        currentVideo = (currentVideo + 1) % numVideosInScene;
-        return;
-    }
-
-    currentVideo = (currentVideo + 1) % numVideosInScene;
-    let nextVideo = currentlyActivePlayer === 0 ? video_2 : video_1;
+    // Determine the video elements based on the currently active player
     let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
+    let nextVideoElement = currentlyActivePlayer === 0 ? video_2 : video_1;
 
-    // Preload next video
-    nextVideo.src = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[currentVideo]}` : `/Videos/${getRandomDachVideo()}`;
-    nextVideo.load();
+    // Play the current video
+    currentVideoElement.play().then(() => {
+        currentVideoElement.classList.remove('hidden');
 
-    nextVideo.oncanplaythrough = () => {
-        // Play next video
-        nextVideo.play().then(() => {
-            requestAnimationFrame(() => {
-                nextVideo.classList.remove('hidden');
-                currentVideoElement.classList.add('hidden');
-                currentVideoElement.pause();
-                currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
-            });
-        }).catch(error => { playVideo()});
+        // Update the index for the next video to be preloaded
+        let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
 
-        // Pause and hide the previous video after next video starts playing
-       
-        // Switch the active player
-       
-    };
+        // Preload the next video in the background
+        let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
+        nextVideoElement.src = nextVideoSrc;
+        nextVideoElement.load(); // Start loading the next video
+
+        // Pause and hide the next video element until it's its turn to play
+        nextVideoElement.pause();
+        nextVideoElement.classList.add('hidden');
+
+        currentVideo = nextVideoIndex;
+        currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
+
+    }).catch(error => console.error("Error playing current video:", error));
+
+
+    // Update the currentVideo and currentlyActivePlayer for the next invocation
+   
 }
 
 let lastDachVideo = -1;
