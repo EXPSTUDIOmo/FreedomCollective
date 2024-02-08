@@ -676,7 +676,7 @@ function createChatMessage(side, repost, msg)
     if(!repost)
     {
         let header = document.createElement('h1');
-        header.classList.add('text-white');
+        header.classList.add('white-text');
         header.classList.add('text-1xl');
         header.classList.add('ml-2');
         header.textContent = side == 'left' ? 'ZSUZSI' : 'KARL';

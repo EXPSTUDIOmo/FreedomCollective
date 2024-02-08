@@ -206,6 +206,13 @@ body {
     color: white;
 }
 
+.white-border {
+    border-color: white;
+}
+
+.white-background  {
+    background-color: white;
+}
 
 .loader {
     width: 50px;
