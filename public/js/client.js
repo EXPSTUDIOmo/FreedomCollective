@@ -381,9 +381,12 @@ function playVideo() {
         nextVideo.play();
 
         // Immediately switch visibility without delay
-        nextVideo.classList.remove('hidden');
-        currentVideoElement.classList.add('hidden');
 
+        requestAnimationFrame(() => {
+            nextVideo.classList.remove('hidden');
+            currentVideoElement.classList.add('hidden');
+        });
+       
         // Pause and hide the previous video after next video starts playing
         currentVideoElement.pause();
 
