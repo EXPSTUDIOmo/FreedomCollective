@@ -26,11 +26,11 @@ const { Server } = require("socket.io");
 const io = new Server(httpServer);
 
 
-app.use((req, res, next) => {
-  res.setHeader('Accept-Ranges', 'bytes');
-  res.set('Cache-Control', 'public, max-age=31536000');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Accept-Ranges', 'bytes');
+//   res.set('Cache-Control', 'public, max-age=31536000');
+//   next();
+// });
 
 
 app.use(express.static(path.join(__dirname, 'public'), {
