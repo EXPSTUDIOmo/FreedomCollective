@@ -689,7 +689,7 @@ function createChatMessage(side, repost, msg)
    
     let text = document.createElement('p');
     text.innerHTML = msg;
-    text.classList.add('text-black');
+    text.classList.add('black-text');
     text.classList.add('text-1xl');
     
     if(side === 'left')

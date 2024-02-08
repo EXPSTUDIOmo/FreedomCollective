@@ -1037,6 +1037,10 @@ body {
   background-color: white;
 }
 
+.black-text {
+  color: black;
+}
+
 .loader {
   width: 50px;
   aspect-ratio: 1;
