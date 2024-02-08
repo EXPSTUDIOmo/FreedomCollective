@@ -241,6 +241,7 @@ function loadScene(scene, time = 0)
             waitscreen.style.display = "none";
             videoscreen.style.display = "none";
             chatscreen.style.display = "none";
+            resetChat();
             preloadVideo(3);
             showIncomingChat();
             displayChat(time);
