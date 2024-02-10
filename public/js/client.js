@@ -345,12 +345,12 @@ function preloadVideo(scene)
 {
     if(scene === 1 || scene === 0)
     {
-        video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
+        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[0]}`;
     }
 
     else
     {
-        video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
+        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_DACH[0]}`;
     }
 
     currentVideo = 0;
@@ -400,7 +400,7 @@ function playVideo() {
     });
     
     let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-    let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
+    let nextVideoSrc = currentScene === 1 ? `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
     nextVideoElement.src = nextVideoSrc;
     nextVideoElement.load(); // Start loading the next video
 
