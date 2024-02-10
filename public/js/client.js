@@ -77,8 +77,6 @@ const waitscreen = document.getElementById('waitscreen');
 const pulses = document.getElementsByClassName('pulse');
 const pulses_play = document.getElementsByClassName('pulse_play');
 
-const video_1 = document.getElementById('video_1');
-const video_2 = document.getElementById('video_2');
 
 const VIDEO_SOURCES_POSES = 
 [
@@ -100,8 +98,22 @@ const VIDEO_SOURCES_DACH =
     'scaled_Baustelle_Pieta_Orbit.mp4'
 ]
 
-let VIDEOS_SCENE_1 = [];
-let VIDEOS_SCENE_3 = [];
+let VIDEOS_SCENE_1 = [
+    document.getElementById('video_s1_1'),
+    document.getElementById('video_s1_2'),
+    document.getElementById('video_s1_3'),
+    document.getElementById('video_s1_4'),
+    document.getElementById('video_s1_5'),
+];
+
+let VIDEOS_SCENE_3 = [
+    document.getElementById('video_s3_1'),
+    document.getElementById('video_s3_2'),
+    document.getElementById('video_s3_3'),
+    document.getElementById('video_s3_4'),
+    document.getElementById('video_s3_5'),
+    document.getElementById('video_s3_6'),
+];
 
 let numVideosInScene = VIDEO_SOURCES_POSES.length;
 
@@ -173,7 +185,7 @@ socket.on('activation', (state) => {
     if(currentScene == state.scene || !isConnected)
         return;
 
-    preloadVideo(state.scene);
+    preloadVideos();
     loadScene(state.scene, state.time);
 });
 
@@ -226,7 +238,7 @@ function loadScene(scene, time = 0)
             isPlaying = false;
             break;
         case 1:
-            preloadVideo(1);
+            preloadVideos(1);
             numVideosInScene = VIDEO_SOURCES_POSES.length;
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
@@ -242,7 +254,7 @@ function loadScene(scene, time = 0)
             videoscreen.style.display = "none";
             chatscreen.style.display = "none";
             resetChat();
-            preloadVideo(3);
+            preloadVideos(3);
             showIncomingChat();
             displayChat(time);
             playSound(1, time);
@@ -252,7 +264,7 @@ function loadScene(scene, time = 0)
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
-            preloadVideo(3);
+            preloadVideos(3);
             showVideoScreen();
             IsInChat = false;
             numVideosInScene = VIDEO_SOURCES_DACH.length;
@@ -280,8 +292,7 @@ function showWaitScreen()
 
         fadeOutTimeOut = setTimeout(() => {
             videoscreen.style.display = "none";
-            video_1.classList.add('hidden');
-            video_2.classList.add('hidden');
+            hideVideos();
             incomingchat.style.display = "none";
             chatscreen.style.display = "none";
             waitscreen.style.display = "flex";
@@ -298,8 +309,7 @@ function showWaitScreen()
     else if(!isPlaying && !inFadeAnimation)
     {
         videoscreen.style.display = "none";
-        video_1.classList.add('hidden');
-        video_2.classList.add('hidden');
+        hideVideos();
         incomingchat.style.display = "none";
         chatscreen.style.display = "none";
         waitscreen.style.display = "flex";
@@ -323,6 +333,21 @@ function showVideoScreen()
 }
 
 
+function hideVideos()
+{
+    for(let video of VIDEOS_SCENE_1)
+    {
+        video.classList.add('hidden');
+        video.pause();
+    }
+
+    for(let video of VIDEOS_SCENE_3)
+    {
+        video.classList.add('hidden');
+        video.pause();
+    }
+}
+
 /*
     ==============================================================
     =========================== AUDIO ============================
@@ -340,94 +365,86 @@ function playSound(sound, time = 0)
 
 let currentlyActivePlayer = 1;
 let currentVideo = 0;
+const maxRetries = 5; // Maximum number of retries
+const retryDelay = 100; // Initial retry delay in milliseconds
+let retryCount = 0;
 
-function preloadVideo(scene)
+function reloadVideo(video) {
+    if (retryCount < maxRetries) {
+        setTimeout(() => {
+            console.log(`Retrying to load video: ${video.src}, Attempt: ${retryCount + 1}`);
+            video.load();
+            retryCount++;
+        }, retryDelay * Math.pow(2, retryCount)); // Exponential backoff
+    } else {
+        console.error(`Failed to load video after ${maxRetries} attempts: ${video.src}`);
+        // Implement fallback logic here, e.g., display a message to the user
+    }
+}
+
+function preloadVideos(scene)
 {
-    if(scene === 1 || scene === 0)
-    {
-        video_1.src = `/Videos/${VIDEO_SOURCES_POSES[0]}`;
-    }
-
-    else
-    {
-        video_1.src = `/Videos/${VIDEO_SOURCES_DACH[0]}`;
-    }
-
     currentVideo = 0;
     currentlyActivePlayer = 0;
+
+    document.querySelectorAll('video').forEach(video => {
+        video.addEventListener('error', () => reloadVideo(video));
+    });
+    
 }
 
 
 
 
-video_1.onwaiting = function() {
-    document.getElementById('video_loading').style.display = 'block';
-  };
+function addVideoListeners()
+{
+    for(let video of VIDEOS_SCENE_1)
+    {
+        let timeout;
 
-video_1.onplaying = function() {
-    document.getElementById('video_loading').style.display = 'none';
-  };
+        video.onwaiting = function() {
+            document.getElementById('video_loading').style.display = 'block';
+            console.log("waiting for playback", video.src);
 
-video_2.onwaiting = function() {
-    document.getElementById('video_loading').style.display = 'block';
-  };
-  
-video_2.onplaying = function() {
-    document.getElementById('video_loading').style.display = 'none';
-  };
+            timeout = setTimeout(() => {
+                video.load();
+                console.log("timeout trying to0 reload");
+                video.oncannplay = function() {
+                    video.play();
+                    console.log("trying to play");
+                }
+            }
+            , 1000);
+        };
 
+        video.onplaying = function() {
+            clearTimeout(timeout);
+            document.getElementById('video_loading').style.display = 'none';
+            console.log('starting play', video.src);
+        };
+    }
+}
+
+
+addVideoListeners();
+let lastPlayingVideo;
 
 function playVideo() {
 
-    // Determine the video elements based on the currently active player
-    let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
-    let nextVideoElement = currentlyActivePlayer === 0 ? video_2 : video_1;
+    let videosToPlay = currentScene === 1 ? VIDEOS_SCENE_1 : VIDEOS_SCENE_3;
 
-    if(!isPlayingVideo)
+    if(lastPlayingVideo)
     {
-        currentVideoElement.classList.remove('hidden');
+        lastPlayingVideo.classList.add('hidden');
+        lastPlayingVideo.pause();
     }
 
-    currentVideoElement.play().then(() => {
-        
-    isPlayingVideo = true;
-
-    requestAnimationFrame(() => {
-
-        currentVideoElement.classList.remove('hidden');
-        nextVideoElement.classList.add('hidden');
-        nextVideoElement.pause();
-    });
-    
-    let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-    let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
-    nextVideoElement.src = nextVideoSrc;
-    nextVideoElement.load(); // Start loading the next video
-
-    // Update variables for the next cycle
-    currentVideo = nextVideoIndex;
-    currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
-
-    }).catch(prepareNextVideoOnError);
-
-
-    // Update the currentVideo and currentlyActivePlayer for the next invocation
-   
+    videosToPlay[currentVideo].play();
+    videosToPlay[currentVideo].classList.remove('hidden');
+    lastPlayingVideo = videosToPlay[currentVideo];
+    currentVideo = (currentVideo + 1) % numVideosInScene;
 }
 
-
-function prepareNextVideoOnError()
-{
-    let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
-    let nextVideoElement = currentlyActivePlayer === 0 ? video_2 : video_1;
-    let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-    let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
-    nextVideoElement.src = nextVideoSrc;
-    nextVideoElement.load(); // Start loading the next video
-    // Update variables for the next cycle
-    currentVideo = nextVideoIndex;
-    currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
-}
 
 let lastDachVideo = -1;
 function getRandomDachVideo()
@@ -450,9 +467,9 @@ let isPlayingVideo = false;
 
 function stopVideos()
 {
-    video_1.pause();
-    video_2.pause();
+   
     isPlayingVideo = false;
+    currentVideo = 0;
 }
 
 
@@ -809,14 +826,6 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
-
-
-
-
-setTimeout(() => {
-    window.scrollTo(0,200);
-}, 500);
 
 
 

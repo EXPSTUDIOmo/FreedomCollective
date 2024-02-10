@@ -31,16 +31,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
-// app.use(express.static(path.join(__dirname, 'public'), {
-//     setHeaders: (res, filePath) => {
-//         if (filePath.endsWith('.mp4')) {
-//             // Set Cache-Control header for MP4 videos
-//             res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-//         }
-//     }
-// }));
+app.use(express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.mp4')) {
+            // Set Cache-Control header for MP4 videos
+            res.set('Cache-Control', 'public, max-age=60000'); // Cache for 1 year
+        }
+    }
+}));
 
 
 
@@ -233,14 +233,14 @@ function setPlayState(state)
   {
     clearInterval(STOP_INTERVAL);
     clearInterval(RETRIGGER_INTERVAL);
-    RETRIGGER_INTERVAL = setInterval(reassureClientPlayback, 2000);
+    RETRIGGER_INTERVAL = setInterval(reassureClientPlayback, 5000);
   }
 
   else
   {
     clearInterval(RETRIGGER_INTERVAL);
     clearInterval(STOP_INTERVAL);
-    STOP_INTERVAL = setInterval(keepClientsSilent, 2000);
+    STOP_INTERVAL = setInterval(keepClientsSilent, 5000);
   }
 }
 
