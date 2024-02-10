@@ -31,16 +31,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
-// app.use(express.static(path.join(__dirname, 'public'), {
-//     setHeaders: (res, filePath) => {
-//         if (filePath.endsWith('.mp4')) {
-//             // Set Cache-Control header for MP4 videos
-//             res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-//         }
-//     }
-// }));
+app.use(express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.mp4')) {
+            // Set Cache-Control header for MP4 videos
+            res.set('Cache-Control', 'public, max-age=7200000'); 
+        }
+    }
+}));
 
 
 
@@ -280,8 +280,6 @@ function loadScene(scene)
   io.emit('start', scene);
 }
 
-
-
 function stopPlayback()
 {
   setPlayState(false);
@@ -290,8 +288,3 @@ function stopPlayback()
 }
 
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}

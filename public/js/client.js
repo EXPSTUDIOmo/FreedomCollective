@@ -796,32 +796,5 @@ function scheduleChatMessage(time, type, side, report, msg)
 
 
 
-/*
-    UTILITY FUNCTIONS
-*/
-
-
-
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-
-
-
-
-setTimeout(() => {
-    window.scrollTo(0,200);
-}, 500);
-
-
-
-
-
-
 
 
