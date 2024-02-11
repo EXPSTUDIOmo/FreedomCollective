@@ -469,9 +469,9 @@ let loadTimeout;
 function loadSounds(voiceid)
 {
 
-    loadSound(0, `Samples/PNO/PNO_H_${voiceid+1}.mp3`);
-    loadSound(1, `Samples/NOT/NOT_H_${voiceid+1}.mp3`);
-    loadSound(2, `Samples/FLT/FLT_H_${voiceid+1}.mp3`);
+    loadSound(0, `https://freedomcdn.fra1.digitaloceanspaces.com/PNO_H_${voiceid+1}.mp3`);
+    loadSound(1, `https://freedomcdn.fra1.digitaloceanspaces.com/NOT_H_${voiceid+1}.mp3`);
+    loadSound(2, `https://freedomcdn.fra1.digitaloceanspaces.com/FLT_H_${voiceid+1}.mp3`);
 }
 
 
