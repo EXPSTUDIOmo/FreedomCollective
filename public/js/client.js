@@ -6,7 +6,6 @@
 */
 
 
-
 let currentScene = 0;
 let isPlaying = false;
 
@@ -19,6 +18,16 @@ const avatarSzusi = document.getElementById('waitavatar_szusi');
 const avatarFan = document.getElementById('waitavatar_fan');
 const avatarKarl = document.getElementById('waitavatar_karl');
 const avatarAndre = document.getElementById('waitavatar_andre');
+
+
+const videomask = document.getElementById('videomask');
+const vm_name = document.getElementById('vm_name');
+const vm_prof = document.getElementById('vm_prof'); 
+const vm_status_value = document.getElementById('vm_status_value');
+const vm_health_value = document.getElementById('vm_health_value');
+const vm_slogan_value = document.getElementById('vm_slogan_value');
+const vm_health_subtext = document.getElementById('vm_health_subtext');
+
 
 const WAIT_AVATARS = [avatarSecretary, avatarSzusi, avatarFan, avatarKarl, avatarAndre];
 
@@ -318,6 +327,7 @@ function showVideoScreen()
 
     setTimeout(() => {
         videoHint.classList.remove('video_hint_anim');
+   
     }, 4100);
 
 }
@@ -390,11 +400,13 @@ function playVideo() {
 
     currentVideoElement.play().then(() => {
         
+    loadVideoMask(currentVideoElement.src);
+
     isPlayingVideo = true;
 
     requestAnimationFrame(() => {
-
         currentVideoElement.classList.remove('hidden');
+        repositionVideoMask(currentlyActivePlayer);
         nextVideoElement.classList.add('hidden');
         nextVideoElement.pause();
     });
@@ -409,12 +421,78 @@ function playVideo() {
     currentlyActivePlayer = currentlyActivePlayer === 0 ? 1 : 0;
 
     }).catch(prepareNextVideoOnError);
-
-
-    // Update the currentVideo and currentlyActivePlayer for the next invocation
-   
 }
 
+
+let checkedVideoPos = false;
+
+function repositionVideoMask(player)
+{
+    let videoElement = player == 1 ? video_1 : video_2;
+    let offset = videoElement.offsetTop;
+    let offsetBot = videoScreen.offsetHeight - videoElement.offsetTop - videoElement.offsetHeight;
+
+    document.getElementById('vm_header').style.top = `${offset + 15}px`;
+    document.getElementById('vm_footer').style.bottom = `${offsetBot + 15}px`;
+
+}
+
+function loadVideoMask(videoName)
+{
+
+    videoName = videoName.substring(videoName.lastIndexOf('/')+1);
+
+    if(videoName == "scaled_Zsuzsi_1_video.mp4")
+    {
+        vm_name.textContent = "ZSUZSI";
+        vm_prof.textContent = "Surgeon";
+        vm_status_value.textContent = "Metaverse Medical Faculty Graduate";
+        vm_health_value.textContent = "200";
+        vm_health_subtext.style.fontSize = "0.7rem";
+        vm_health_subtext.textContent = "(Hey, I’m a doctor… 🦄)";
+        vm_slogan_value.textContent = "Generosity";
+    }
+    
+    else if(videoName == "scaled_Secretary_2_video.mp4")
+    {
+       
+
+    }
+
+    else if(videoName == "scaled_Fan_1_video.mp4")
+    {
+        vm_name.textContent = "FAN";
+        vm_prof.textContent = "Nutritionist";
+        vm_status_value.textContent = "No citizenship";
+        vm_health_value.textContent = "91";
+        vm_health_subtext.style.fontSize = "0.8rem";
+        vm_health_subtext.textContent = "(Nano chipped)";
+        vm_slogan_value.textContent = "Respect don’t expect";
+    }
+
+    else if(videoName == "scaled_Karl_2_video.mp4")
+    {
+        vm_name.textContent = "KARL";
+        vm_prof.textContent = "Coach";
+        vm_status_value.textContent = "Proud Member of the Coaching Federation";
+        vm_health_value.textContent = "35";
+        vm_health_subtext.style.fontSize = "0.8rem";
+        vm_health_subtext.textContent = "(Nano chipped)";
+        vm_slogan_value.textContent = "Endless victory";
+    }
+
+    else if(videoName == "scaled_Andrei_2_video.mp4")
+    {
+        vm_name.textContent = "ANDREI";
+        vm_prof.textContent = "Fighter";
+        vm_status_value.innerHTML = "No citizenship,<br>No coaching contracts";
+        vm_health_value.textContent = "98";
+        vm_health_subtext.style.fontSize = "0.8rem";
+        vm_health_subtext.textContent = "(Nano chipped)";
+        vm_slogan_value.textContent = "Expect the unexpected";
+    }
+    
+}
 
 function prepareNextVideoOnError()
 {
@@ -548,6 +626,7 @@ connectBtn.onclick = () =>
         document.getElementById('startscreen').style.display = "none";
         document.getElementById('content').style.display = "flex";
         setOnWaitScreen(true);
+        repositionVideoMask(currentlyActivePlayer);
     }, 1200)
 
     // wakelock

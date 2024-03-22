@@ -11,7 +11,7 @@
     <script type="text/javascript" src="/js/socket.io.js"></script>
     <script type="text/javascript" src="/js/howler.min.js"></script>
     <script src="NoSleep.min.js"></script>
-    <script defer src="/js/client.min.js" type="module"></script>
+    <script defer src="/js/client.js" type="module"></script>
   </head>
   <body class="background fcheight">
  
@@ -89,6 +89,28 @@
 
       <!-- VIDEO SCREEN-->
       <div id="videoscreen" class="relative flex justify-center items-center w-full h-full hidden bg-black">
+
+        <div id="videomask" class="absolute fcfont w-full h-full">
+          <div id="vm_header" class="absolute left-4 top-2">
+            <h1 id="vm_name" class="text-4xl">ANDREI</h1>
+            <h2 id="vm_prof" class="mb-2">Boxer, 26</h2>
+          </div>
+          <div id="vm_footer" class="absolute bottom-16 m-auto left-0 right-0 rounded">
+            <div id="vm_status" class="vm_container vm_halfwidth">
+              <h1 class="text-sm font-InterTight mb-1">STATUS</h1>
+              <p id="vm_status_value" class="font-sm">Non-citizen,<br> No coaching contracts</p>
+            </div>
+            <div id="vm_health" class="vm_container vm_halfwidth">
+              <h1 class="text-sm font-InterTight mb-1">HEALTH</h1>
+              <h1 id="vm_health_value" style="font-size: 2rem;">98</h1>
+              <p id="vm_health_subtext" style="font-size: 0.7rem">(nano chipped)</p>
+            </div>
+            <div id="vm_slogan" class="vm_container vm_fullwidth h-6">
+              <p id="vm_slogan_value" class="font-sm">Expecting the unexpected (ha ha)</p>
+            </div>
+          </div>
+        </div>
+        
         <video id="video_1" src="https://freedomcdn.fra1.cdn.digitaloceanspaces.com/scaled_Zsuzsi_1_video.mp4" playsinline muted loop class="hidden video" preload="auto"></video>
         <video id="video_2" src="https://freedomcdn.fra1.cdn.digitaloceanspaces.com/scaled_Zsuzsi_1_video.mp4" playsinline muted loop class="hidden video" preload="auto"></video>
         <div id="video_tab_hint" class="hidden absolute fcfont white-text text-center text-2xl">Tap on video</div>

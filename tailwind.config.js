@@ -6,7 +6,9 @@ module.exports = {
       fontFamily: {
        Mynerve: ['Mynerve', 'serif'],
        Baskervville: ['Baskervville', 'serif'],
-       Luckiest: ['Luckiest', 'serif']
+       Luckiest: ['Luckiest', 'serif'],
+       Sanchez: ['Sanchez', 'sans-serif'],
+       InterTight: ['InterTight', 'sans-serif']
     },
   },
   },
