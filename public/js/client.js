@@ -233,7 +233,9 @@ function loadScene(scene, time = 0)
             resetChat();
             IsInChat = false;
             isPlaying = false;
+            videomask.style.display = "none";
             break;
+            
         case 1:
             preloadVideo(1);
             numVideosInScene = VIDEO_SOURCES_POSES.length;
@@ -245,6 +247,7 @@ function loadScene(scene, time = 0)
             playVideo();
             playSound(0, time);
             isPlaying = true;
+            videomask.style.display = "block";
             break;
         case 2:
             waitscreen.style.display = "none";
@@ -256,6 +259,7 @@ function loadScene(scene, time = 0)
             displayChat(time);
             playSound(1, time);
             isPlaying = true;
+            videomask.style.display = "none";
             break;
         case 3:
             waitscreen.style.display = "none";
@@ -268,6 +272,7 @@ function loadScene(scene, time = 0)
             playSound(2, time);
             playVideo();
             isPlaying = true;
+            videomask.style.display = "none";
             break;
         default:
             break;
