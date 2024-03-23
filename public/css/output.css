@@ -864,6 +864,13 @@ video {
   padding: 0;
 }
 
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
 @font-face {
   font-family: 'Baskervville';
 
@@ -1459,6 +1466,7 @@ body {
 
 #vm_header{
   text-shadow: 1px 1px 2px rgba(37, 1, 49, 0.518);
+  margin-top: env(safe-area-inset-top);
 }
 
 #vm_footer {
@@ -1467,6 +1475,7 @@ body {
   width: 90%;
   border: 2px solid white;
   background: linear-gradient(162deg, #7e017160 0.79%, #5e037899 100%);
+  margin-bottom: env(safe-area-inset-bottom);
 }
 
 #vm_status {

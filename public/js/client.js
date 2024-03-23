@@ -432,12 +432,12 @@ let checkedVideoPos = false;
 
 function repositionVideoMask(player)
 {
-    let videoElement = player == 1 ? video_1 : video_2;
-    let offset = videoElement.offsetTop;
-    let offsetBot = videoScreen.offsetHeight - videoElement.offsetTop - videoElement.offsetHeight;
+    // let videoElement = player == 1 ? video_1 : video_2;
+    // let offset = videoElement.offsetTop;
+    // let offsetBot = videoScreen.offsetHeight - videoElement.offsetTop - videoElement.offsetHeight;
 
-    document.getElementById('vm_header').style.top = `${offset + 50}px`;
-    document.getElementById('vm_footer').style.bottom = `${offsetBot + 65}px`;
+    // document.getElementById('vm_header').style.top = `${offset + 50}px`;
+    // document.getElementById('vm_footer').style.bottom = `${offsetBot + 65}px`;
 
 }
 
