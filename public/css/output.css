@@ -1473,7 +1473,7 @@ body {
   border: 2px solid white;
   background: linear-gradient(162deg, #7e017160 0.79%, #5e037899 100%);
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 2rem);
+  bottom: calc(env(safe-area-inset-bottom) + 3.5rem);
 }
 
 #vm_status {
