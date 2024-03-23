@@ -436,8 +436,8 @@ function repositionVideoMask(player)
     let offset = videoElement.offsetTop;
     let offsetBot = videoScreen.offsetHeight - videoElement.offsetTop - videoElement.offsetHeight;
 
-    document.getElementById('vm_header').style.top = `${offset + 15}px`;
-    document.getElementById('vm_footer').style.bottom = `${offsetBot + 15}px`;
+    document.getElementById('vm_header').style.top = `${offset + 45}px`;
+    document.getElementById('vm_footer').style.bottom = `${offsetBot + 45}px`;
 
 }
 
