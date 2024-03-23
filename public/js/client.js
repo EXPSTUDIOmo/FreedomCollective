@@ -92,7 +92,6 @@ const video_2 = document.getElementById('video_2');
 const VIDEO_SOURCES_POSES = 
 [
     'scaled_Zsuzsi_1_video.mp4',
-    'scaled_Secretary_2_video.mp4',
     'scaled_Fan_1_video.mp4',
     'scaled_Karl_2_video.mp4',
     'scaled_Andrei_2_video.mp4',
@@ -458,11 +457,6 @@ function loadVideoMask(videoName)
         vm_slogan_value.textContent = "Generosity";
     }
     
-    else if(videoName == "scaled_Secretary_2_video.mp4")
-    {
-       
-
-    }
 
     else if(videoName == "scaled_Fan_1_video.mp4")
     {
