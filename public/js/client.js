@@ -104,8 +104,7 @@ const VIDEO_SOURCES_DACH =
     'scaled_Dach_3_video.mp4',
     'scaled_Dach_4_video.mp4',
     'scaled_Dach_5_video.mp4',
-    'scaled_Dach_6_video.mp4',
-    'scaled_Baustelle_Pieta_Orbit.mp4'
+    'scaled_Dach_6_video.mp4'
 ]
 
 let VIDEOS_SCENE_1 = [];
