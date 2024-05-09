@@ -60,6 +60,11 @@ app.get('/max/admin/ping', (req, res) => {
   res.send(data);
 });
 
+app.get('/max/admin/scene/0', (req, res) => {
+  loadScene(4);
+  res.send('start 0');
+});
+
 app.get('/max/admin/scene/1', (req, res) => {
   loadScene(1);
   res.send('start 1');
@@ -268,7 +273,6 @@ function reassureClientPlayback()
 
 function loadScene(scene)
 {
-
   currentScene = scene;
   
   if(scene === 0)
