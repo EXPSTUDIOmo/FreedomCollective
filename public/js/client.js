@@ -105,7 +105,15 @@ const VIDEO_SOURCES_DACH =
     'scaled_Dach_4_video.mp4',
     'scaled_Dach_5_video.mp4',
     'scaled_Dach_6_video.mp4'
-]
+];
+
+const VIDEO_SOURCES_BAUSTELLE = 
+[
+    'scaled2_Baustelle_entry_video_2.mp4',
+    'scaled2_Baustelle_entry_video_3.mp4',
+    'scaled2_Baustelle_Kampf_2_2_video.mp4',
+    'scaled2_Baustelle_Kampf_2_3_video.mp4'
+];
 
 let VIDEOS_SCENE_1 = [];
 let VIDEOS_SCENE_3 = [];
@@ -116,9 +124,6 @@ videoscreen.addEventListener('click', () => {
     playVideo();
     videoHint.style.display = "none";
 })
-
-
-
 
 
 
@@ -236,7 +241,7 @@ function loadScene(scene, time = 0)
             
         case 1:
             preloadVideo(1);
-            numVideosInScene = VIDEO_SOURCES_POSES.length;
+            numVideosInScene = VIDEO_SOURCES_BAUSTELLE.length;
             waitscreen.style.display = "none";
             chatscreen.style.display = "none";
             incomingchat.style.display = "none";
@@ -245,7 +250,7 @@ function loadScene(scene, time = 0)
             playVideo();
             playSound(0, time);
             isPlaying = true;
-            videomask.style.display = "block";
+            videomask.style.display = "none";
             break;
         case 2:
             waitscreen.style.display = "none";
@@ -271,6 +276,19 @@ function loadScene(scene, time = 0)
             playVideo();
             isPlaying = true;
             videomask.style.display = "none";
+            break;
+        case 4:
+            preloadVideo(4);
+            numVideosInScene = VIDEO_SOURCES_POSES.length;
+            waitscreen.style.display = "none";
+            chatscreen.style.display = "none";
+            incomingchat.style.display = "none";
+            showVideoScreen();
+            IsInChat = false;
+            playVideo();
+            playSound(3, time);
+            isPlaying = true;
+            videomask.style.display = "block";
             break;
         default:
             break;
@@ -358,12 +376,17 @@ function preloadVideo(scene)
 {
     if(scene === 1 || scene === 0)
     {
-        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[0]}`;
+        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[0]}`;
     }
 
-    else
+    else if(scene === 3)
     {
         video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_DACH[0]}`;
+    }
+
+    else if(scene === 4)
+    {
+        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[0]}`;
     }
 
     currentVideo = 0;
@@ -409,13 +432,28 @@ function playVideo() {
 
     requestAnimationFrame(() => {
         currentVideoElement.classList.remove('hidden');
-        repositionVideoMask(currentlyActivePlayer);
         nextVideoElement.classList.add('hidden');
         nextVideoElement.pause();
     });
     
     let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-    let nextVideoSrc = currentScene === 1 ? `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
+    let nextVideoSrc;
+
+    if(currentScene === 4)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
+    }
+
+    else if(currentScene === 1)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
+    }
+
+    else if(currentScene === 3)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
+    }
+
     nextVideoElement.src = nextVideoSrc;
     nextVideoElement.load(); // Start loading the next video
 
@@ -429,20 +467,8 @@ function playVideo() {
 
 let checkedVideoPos = false;
 
-function repositionVideoMask(player)
-{
-    // let videoElement = player == 1 ? video_1 : video_2;
-    // let offset = videoElement.offsetTop;
-    // let offsetBot = videoScreen.offsetHeight - videoElement.offsetTop - videoElement.offsetHeight;
-
-    // document.getElementById('vm_header').style.top = `${offset + 50}px`;
-    // document.getElementById('vm_footer').style.bottom = `${offsetBot + 65}px`;
-
-}
-
 function loadVideoMask(videoName)
 {
-
     videoName = videoName.substring(videoName.lastIndexOf('/')+1);
 
     if(videoName == "scaled_Zsuzsi_1_video.mp4")
@@ -497,7 +523,25 @@ function prepareNextVideoOnError()
     let currentVideoElement = currentlyActivePlayer === 0 ? video_1 : video_2;
     let nextVideoElement = currentlyActivePlayer === 0 ? video_2 : video_1;
     let nextVideoIndex = (currentVideo + 1) % numVideosInScene;
-    let nextVideoSrc = currentScene === 1 ? `/Videos/${VIDEO_SOURCES_POSES[nextVideoIndex]}` : `/Videos/${getRandomDachVideo()}`;
+    
+    let nextVideoSrc;
+
+    if(currentScene === 4)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
+    }
+
+    else if(currentScene === 1)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
+    }
+
+    else if(currentScene === 3)
+    {
+        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
+    }
+
+    
     nextVideoElement.src = nextVideoSrc;
     nextVideoElement.load(); // Start loading the next video
     // Update variables for the next cycle
@@ -544,10 +588,10 @@ let loadTimeout;
 
 function loadSounds(voiceid)
 {
-
     loadSound(0, `https://freedomcdn.fra1.digitaloceanspaces.com/PNO_H_${voiceid+1}.mp3`);
     loadSound(1, `https://freedomcdn.fra1.digitaloceanspaces.com/NOT_H_${voiceid+1}.mp3`);
     loadSound(2, `https://freedomcdn.fra1.digitaloceanspaces.com/FLT_H_${voiceid+1}.mp3`);
+    loadSound(3, `https://freedomcdn.fra1.digitaloceanspaces.com/intro_${voiceid+1}.mp3`);
 }
 
 
@@ -556,6 +600,7 @@ function loadSound(index, url, retries = 0, maxRetries = 3) {
     SOUNDS[index] = new Howl({
         src: [url],
         html5: true,
+        loop: index == 3 ? true : false,
         onload: function() {
             incrementSFLoaded();
         },
@@ -575,7 +620,7 @@ function loadSound(index, url, retries = 0, maxRetries = 3) {
 
 
 
-const SoundfilesToLoad = 3;
+const SoundfilesToLoad = 4;
 let soundfilesLoaded = 0;
 
 function incrementSFLoaded()
@@ -624,7 +669,7 @@ connectBtn.onclick = () =>
         document.getElementById('startscreen').style.display = "none";
         document.getElementById('content').style.display = "flex";
         setOnWaitScreen(true);
-        repositionVideoMask(currentlyActivePlayer);
+
     }, 1200)
 
     // wakelock

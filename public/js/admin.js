@@ -68,11 +68,12 @@ document.getElementById('stopbtn').onclick = () => {
     socket.emit('admin_stop');
 };
 
-
+document.getElementById('scene0btn').onclick = () => {
+    socket.emit('admin_scene_0');
+};
 document.getElementById('scene1btn').onclick = () => {
     socket.emit('admin_scene_1');
 };
-
 
 document.getElementById('scene2btn').onclick = () => {
     socket.emit('admin_scene_2');

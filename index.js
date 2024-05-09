@@ -151,6 +151,11 @@ function addAdmin(socket)
     sendStateToAdmins(socket);
    })
   
+   socket.on('admin_scene_0', () => {
+    loadScene(4);
+    sendStateToAdmins(socket);
+   })
+
    socket.on('admin_scene_1', () => {
     loadScene(1);
     sendStateToAdmins(socket);
