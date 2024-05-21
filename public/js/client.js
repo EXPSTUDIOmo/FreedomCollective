@@ -100,11 +100,7 @@ const VIDEO_SOURCES_POSES =
 
 const VIDEO_SOURCES_DACH = 
 [
-    'scaled_Dach_1_video.mp4',
-    'scaled_Dach_3_video.mp4',
-    'scaled_Dach_4_video.mp4',
-    'scaled_Dach_5_video.mp4',
-    'scaled_Dach_6_video.mp4'
+    'scaled_Dach_3_video.mp4'
 ];
 
 const VIDEO_SOURCES_BAUSTELLE = 
@@ -121,8 +117,11 @@ let VIDEOS_SCENE_3 = [];
 let numVideosInScene = VIDEO_SOURCES_POSES.length;
 
 videoscreen.addEventListener('click', () => {
-    playVideo();
+
     videoHint.style.display = "none";
+
+    if(currentScene != 3)
+        playVideo();
 })
 
 
@@ -343,6 +342,10 @@ function showWaitScreen()
 function showVideoScreen()
 {
     videoscreen.style.display = "flex";
+
+    if(currentScene === 3)
+        return;
+
     videoHint.style.display = "block";
     videoHint.classList.add('video_hint_anim');
 
