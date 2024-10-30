@@ -379,17 +379,17 @@ function preloadVideo(scene)
 {
     if(scene === 1 || scene === 0)
     {
-        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[0]}`;
+        video_1.src = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[0]}`;
     }
 
     else if(scene === 3)
     {
-        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_DACH[0]}`;
+        video_1.src = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_DACH[0]}`;
     }
 
     else if(scene === 4)
     {
-        video_1.src = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[0]}`;
+        video_1.src = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[0]}`;
     }
 
     currentVideo = 0;
@@ -444,17 +444,17 @@ function playVideo() {
 
     if(currentScene === 4)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
     }
 
     else if(currentScene === 1)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
     }
 
     else if(currentScene === 3)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
     }
 
     nextVideoElement.src = nextVideoSrc;
@@ -531,17 +531,17 @@ function prepareNextVideoOnError()
 
     if(currentScene === 4)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_POSES[nextVideoIndex]}`;
     }
 
     else if(currentScene === 1)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${VIDEO_SOURCES_BAUSTELLE[nextVideoIndex]}`;
     }
 
     else if(currentScene === 3)
     {
-        nextVideoSrc = `https://freedomcdn.fra1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
+        nextVideoSrc = `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/${getRandomDachVideo()}`;
     }
 
     
