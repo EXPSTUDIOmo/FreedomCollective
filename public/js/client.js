@@ -591,10 +591,10 @@ let loadTimeout;
 
 function loadSounds(voiceid)
 {
-    loadSound(0, `https://freedomcdn.fra1.digitaloceanspaces.com/PNO_H_${voiceid+1}.mp3`);
-    loadSound(1, `https://freedomcdn.fra1.digitaloceanspaces.com/NOT_H_${voiceid+1}.mp3`);
-    loadSound(2, `https://freedomcdn.fra1.digitaloceanspaces.com/FLT_H_${voiceid+1}.mp3`);
-    loadSound(3, `https://freedomcdn.fra1.digitaloceanspaces.com/intro_${voiceid+1}.mp3`);
+    loadSound(0, `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/PNO_H_${voiceid+1}.mp3`);
+    loadSound(1, `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/NOT_H_${voiceid+1}.mp3`);
+    loadSound(2, `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/FLT_H_${voiceid+1}.mp3`);
+    loadSound(3, `https://freedom-collective.sgp1.cdn.digitaloceanspaces.com/intro_${voiceid+1}.mp3`);
 }
 
 
