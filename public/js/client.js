@@ -613,7 +613,7 @@ function loadSound(index, url, retries = 0, maxRetries = 3) {
                 loadSound(index, url, retries + 1, maxRetries); 
             } else {
                
-                window.location.reload();
+                //window.location.reload();
             }
         }
     });
